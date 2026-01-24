@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #000000; /* Classic Black Ink */
+  --color-background-light: #fcfbf9; /* Paper White */
+  --color-background-dark: #101622;
+  --color-ink: #0d121b;
+  --color-paper: #fcfbf9;
+
+  --font-news: "Newsreader", serif;
+  --font-serif: "Newsreader", serif;
+  --font-mono: "Courier Prime", monospace;
+  --font-sans: "Inter", sans-serif;
+
+  --background-image-halftone: radial-gradient(circle, #0d121b 2px, transparent 2.5px);
+  --background-size-halftone: 4px 4px;
+}
+
+/* Newspaper Utilities */
+.font-news {
+    font-family: var(--font-news);
+}
+
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+/* Borders */
+.border-double-thick {
+    border-top: 4px solid #000;
+    border-bottom: 1px solid #000;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.border-thick-bottom {
+    border-bottom: 4px solid #000;
+}
+
+/* Typography */
+.drop-cap::first-letter {
+    float: left;
+    font-size: 4rem;
+    line-height: 0.8;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    margin-top: 0.2rem;
+    font-family: var(--font-news);
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+/* Effects */
+.halftone-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #000 1px, transparent 1.5px);
+    background-size: 4px 4px;
+    opacity: 0.15;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+.grayscale-img {
+    filter: grayscale(100%) contrast(1.1);
+    transition: filter 0.3s ease;
+}
+
+.grayscale-img:hover {
+    filter: grayscale(0%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+    animation: marquee 30s linear infinite;
+}
