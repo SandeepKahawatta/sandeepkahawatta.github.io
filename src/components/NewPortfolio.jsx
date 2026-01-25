@@ -41,11 +41,26 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
       {/* Sticky Navigation & Ticker */}
       <div className="sticky top-0 z-50 bg-[#fcfbf9] dark:bg-[#101622] border-b border-black dark:border-white/20">
         <div className="w-full border-t border-black dark:border-white/20 border-b border-black dark:border-white/20 py-2 flex justify-center gap-8 md:gap-16 text-sm md:text-base font-bold uppercase tracking-wide font-sans bg-[#fcfbf9] dark:bg-[#101622]">
-          <a className="hover:text-gray-600 transition-colors" href="#editorial">Editorial</a>
-          <a className="hover:text-gray-600 transition-colors" href="#projects">Projects</a>
-          <a className="hover:text-gray-600 transition-colors" href="#skills">Skills</a>
-          <a className="hover:text-gray-600 transition-colors" href="#classifieds">Classifieds</a>
-          <a className="hover:text-gray-600 transition-colors" href="#achievements">Achievements</a>
+          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#editorial">
+            Editorial
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#projects">
+            Projects
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#skills">
+            Skills
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#classifieds">
+            Classifieds
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#achievements">
+            Achievements
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+          </a>
         </div>
         <BreakingNews />
       </div>
