@@ -1,13 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import profileImage from '../assets/my/profile.jpg';
 import cleanCodeImage from '../assets/generated/clean_code_illustration.png';
 import BreakingNews from './BreakingNews';
+
+const useScrollReveal = () => {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRevealed(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isRevealed];
+};
 
 const NewPortfolio = ({ projects, profile, skills, education, achievements }) => {
   const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
   // Helper to get first 3 projects for the main stories
   const mainStories = projects.slice(0, 3);
+
+  const [activeSection, setActiveSection] = useState('');
+
+  // Scroll Reveal Hooks
+  const [profileRef, isProfileRevealed] = useScrollReveal();
+  const [cleanCodeRef, isCleanCodeRevealed] = useScrollReveal();
+  const [project1Ref, isProject1Revealed] = useScrollReveal();
+  const [project2Ref, isProject2Revealed] = useScrollReveal();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['editorial', 'achievements', 'skills', 'projects', 'classifieds'];
+      const scrollPosition = window.scrollY + 250; 
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetHeight = element.offsetHeight;
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); 
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
 
   return (
@@ -41,26 +97,26 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
       {/* Sticky Navigation & Ticker */}
       <div className="sticky top-0 z-50 bg-[#fcfbf9] dark:bg-[#101622] border-b border-black dark:border-white/20">
         <div className="w-full border-t border-black dark:border-white/20 border-b border-black dark:border-white/20 py-2 flex justify-center gap-8 md:gap-16 text-sm md:text-base font-bold uppercase tracking-wide font-sans bg-[#fcfbf9] dark:bg-[#101622]">
-          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#editorial">
+          <a className={`relative group transition-colors duration-300 ${activeSection === 'editorial' ? 'text-red-600' : 'hover:text-red-600'}`} href="#editorial">
             Editorial
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-600 transition-all duration-300 ${activeSection === 'editorial' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </a>
-          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#projects">
+          <a className={`relative group transition-colors duration-300 ${activeSection === 'projects' ? 'text-red-600' : 'hover:text-red-600'}`} href="#projects">
             Projects
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-600 transition-all duration-300 ${activeSection === 'projects' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </a>
-          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#skills">
+          <a className={`relative group transition-colors duration-300 ${activeSection === 'skills' ? 'text-red-600' : 'hover:text-red-600'}`} href="#skills">
             Skills
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-600 transition-all duration-300 ${activeSection === 'skills' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </a>
-          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#classifieds">
+          <a className={`relative group transition-colors duration-300 ${activeSection === 'classifieds' ? 'text-red-600' : 'hover:text-red-600'}`} href="#classifieds">
             Classifieds
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-600 transition-all duration-300 ${activeSection === 'classifieds' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </a>
-          <a className="relative group hover:text-red-600 transition-colors duration-300" href="#achievements">
+          {/* <a className={`relative group transition-colors duration-300 ${activeSection === 'achievements' ? 'text-red-600' : 'hover:text-red-600'}`} href="#achievements">
             Achievements
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
-          </a>
+            <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-600 transition-all duration-300 ${activeSection === 'achievements' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </a> */}
         </div>
         <BreakingNews />
       </div>
@@ -114,7 +170,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
 
                   {/* Image Column */}
                   <div className="relative group">
-                     <div className="relative w-full aspect-[3/4] overflow-hidden border border-black dark:border-white grayscale contrast-125 brightness-110 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.2)]">
+                     <div ref={profileRef} className={`relative w-full aspect-[3/4] overflow-hidden border border-black dark:border-white contrast-125 brightness-110 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.2)] transition-all duration-1000 ease-out ${isProfileRevealed ? 'grayscale-0' : 'grayscale'}`}>
                         <img 
                            src={profileImage} 
                            alt="Portrait of a software engineer looking confident against a blurred city background" 
@@ -139,7 +195,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
                      
                      <div className="flex-grow">
                         <div className="border border-black mb-4 p-1">
-                           <img src={cleanCodeImage} alt="Clean Code Architecture" className="w-full h-auto grayscale contrast-125" />
+                           <img ref={cleanCodeRef} src={cleanCodeImage} alt="Clean Code Architecture" className={`w-full h-auto contrast-125 transition-all duration-1000 ease-out ${isCleanCodeRevealed ? 'grayscale-0' : 'grayscale'}`} />
                         </div>
                         <div className="border-t-2 border-black pt-2">
                            <span className="text-[10px] font-bold uppercase tracking-widest bg-black text-white px-1 mb-2 inline-block">Editorial</span>
@@ -231,9 +287,9 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
                 <p className="text-[10px] font-mono uppercase tracking-widest mb-4 text-gray-400">Help Wanted</p>
                 <h5 className="text-xl font-bold leading-tight mb-2 font-serif">EXPERT ENGINEER FOR HIRE</h5>
                 <p className="text-xs italic text-gray-400 mb-4">Proven track record. Will travel (remotely).</p>
-                <button className="border border-white px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full">
+                <a href="/resume.pdf" download="Sandeep_Kahawatta_CV.pdf" className="inline-block border border-white px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full">
                   Download Portfolio CV
-                </button>
+                </a>
               </div>
 
               {/* Links */}
@@ -289,7 +345,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
             {mainStories[0] && (
               <article className="group cursor-pointer">
                 <div className="mb-4 overflow-hidden border border-black">
-                  <img src={mainStories[0].image} alt={mainStories[0].title} className="w-full h-64 object-cover grayscale-img group-hover:scale-105 transition-transform duration-500" />
+                  <img ref={project1Ref} src={mainStories[0].image} alt={mainStories[0].title} className={`w-full h-64 object-cover group-hover:scale-105 ${isProject1Revealed ? 'grayscale-0' : 'grayscale'}`} style={{ transition: 'filter 1.5s ease-out, transform 0.5s ease-out' }} />
                 </div>
                 <div className="flex items-center gap-2 mb-3 text-xs font-bold uppercase tracking-widest text-gray-500">
                   <span>Feature Story</span>
@@ -323,7 +379,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
                   The debate is over. {mainStories[1].title} proves that {mainStories[1].tech.join(', ')} is not just a luxury; it's a necessity for scaling beyond limits.
                 </p>
                 <div className="mb-6 overflow-hidden border border-black">
-                  <img src={mainStories[1].image} alt={mainStories[1].title} className="w-full h-48 object-cover grayscale-img" />
+                  <img ref={project2Ref} src={mainStories[1].image} alt={mainStories[1].title} className={`w-full h-48 object-cover transition-all duration-1000 ease-out ${isProject2Revealed ? 'grayscale-0' : 'grayscale'}`} />
                 </div>
                 <button className="text-xs font-bold uppercase tracking-widest border-b border-black pb-1 hover:text-gray-600">Read Op-Ed</button>
               </article>
