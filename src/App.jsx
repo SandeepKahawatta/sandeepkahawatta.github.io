@@ -19,9 +19,9 @@ const Portfolio = () => {
     bio: "A logical thinker and creative problem solver who loves diving into the unknown. I have a deep passion for exploring new technologies and turning complex challenges into simple, effective solutions.",
     contact: {
       phone: "+94775699653",
-      email: "mailto:your.email@gmail.com", // Placeholder as actual email wasn't explicitly in text but implied
-      linkedin: "#",
-      github: "#"
+      email: "sandeepkahawatta9@gmail.com",
+      linkedin: "http://www.linkedin.com/in/sandeep-kahawatta-a7b5a8216",
+      github: "https://github.com/SandeepKahawatta"
     }
   };
 
