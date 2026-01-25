@@ -28,6 +28,142 @@ const useScrollReveal = () => {
   return [ref, isRevealed];
 };
 
+const ProjectModal = ({ project, isOpen, onClose }) => {
+  if (!project) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          {/* Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          />
+          
+          {/* Modal Content */}
+          <motion.div 
+            layoutId={`project-${project.title}`}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative w-full max-w-4xl max-h-[90vh] bg-[#fcfbf9] border-4 border-black shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] overflow-y-auto overflow-x-hidden p-6 md:p-12"
+          >
+            {/* Close Button */}
+            <button 
+              onClick={onClose}
+              className="absolute top-4 right-4 font-black text-2xl hover:text-red-600 transition-colors"
+            >
+              [ CLOSE ]
+            </button>
+
+            {/* Newspaper Header inside Modal */}
+            <div className="text-center border-b-2 border-black pb-4 mb-8">
+              <h2 className="text-sm font-mono uppercase tracking-[0.3em]">Special Technical Supplement</h2>
+            </div>
+
+            <div className="max-w-2xl mx-auto">
+              <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-6 text-center tracking-tighter">
+                {project.title}
+              </h1>
+              
+              <div className="flex justify-center gap-4 mb-8 border-y border-black py-2 font-serif italic">
+                <span>By Sandeep Kahawaththa</span>
+                <span>•</span>
+                <span>Published {new Date().toLocaleDateString()}</span>
+              </div>
+
+              <div className="border-2 border-black p-1 mb-8">
+                <img src={project.image} alt={project.title} className="w-full h-auto grayscale-0" />
+              </div>
+
+              <div className="columns-1 md:columns-2 gap-8 font-serif text-justify leading-relaxed">
+                <p className="drop-cap text-lg mb-4">{project.description}</p>
+                <div className="mt-6 p-4 bg-gray-100 border-l-4 border-black italic">
+                   "The technical stack involved {project.tech.join(', ')}. This architectural approach ensured maximum efficiency."
+                </div>
+                <div className="mt-8 flex flex-col gap-4">
+                  <h4 className="font-bold uppercase tracking-widest border-b border-black text-xs">Repository Access</h4>
+                  <a href="#" className="bg-black text-white text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
+                    Visit Source Code &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const ProjectSection = ({ projects }) => {
+  const [headlineRef, isHeadlineRevealed] = useScrollReveal();
+  return (
+    <section id="projects" className="mb-20 border-t-4 border-black pt-8">
+      {/* SECTION TITLE */}
+      <div className="flex justify-between items-center mb-8 border-b border-black pb-2">
+        <h3 className="text-4xl font-black font-news uppercase tracking-tighter">Technical Gazette</h3>
+        <span className="font-serif italic text-sm">Volume III • Project Archive</span>
+      </div>
+
+      <div className="grid lg:grid-cols-12 gap-8">
+        
+        {/* LEFT: MAIN HEADLINE (Project 0) */}
+        <div className="lg:col-span-7 border-r border-black/10 pr-0 lg:pr-8">
+          <article className="group">
+            <div ref={headlineRef} className="relative mb-4 overflow-hidden border border-black p-1 bg-white">
+              <img 
+                src={projects[0].image} 
+                className="w-full grayscale hover:grayscale-0 transition-all duration-700 aspect-video object-cover" 
+              />
+            </div>
+            <span className="text-xs font-bold bg-red-600 text-white px-2 py-0.5 uppercase mb-2 inline-block">Special Report</span>
+            <h2 className="text-4xl font-black leading-none mb-4 group-hover:underline">{projects[0].title}</h2>
+            <p className="font-serif text-lg leading-relaxed mb-4 text-justify">
+              <span className="float-left text-6xl font-black mr-3 mt-1 leading-none">T</span>
+              {projects[0].description}
+            </p>
+            <div className="flex gap-2 mb-4">
+               {projects[0].tech.map(t => <span key={t} className="text-[10px] border border-black px-2 py-0.5 font-mono uppercase italic">{t}</span>)}
+            </div>
+          </article>
+        </div>
+
+        {/* MIDDLE: SUB-STORIES (Project 1 & 2) */}
+        <div className="lg:col-span-3 flex flex-col gap-8 border-r border-black/10 pr-0 lg:pr-8">
+          {projects.slice(1, 3).map((project, idx) => (
+            <article key={idx} className="group border-b border-black/10 pb-6 last:border-0">
+              <div className="border border-black mb-3 p-1">
+                <img src={project.image} className="w-full grayscale group-hover:grayscale-0 transition-all aspect-square object-cover" />
+              </div>
+              <h4 className="font-bold text-xl leading-tight mb-2 group-hover:underline">{project.title}</h4>
+              <p className="text-sm font-serif text-gray-700 line-clamp-3">{project.description}</p>
+            </article>
+          ))}
+        </div>
+
+        {/* RIGHT: THE "NEWS BRIEFS" (Project 3+) */}
+        <div className="lg:col-span-2">
+          <h5 className="font-black uppercase border-b-2 border-black mb-4 text-center bg-black text-white text-xs py-1">Code Briefs</h5>
+          <div className="flex flex-col gap-6">
+            {projects.slice(3).map((project, idx) => (
+              <div key={idx} className="border-b border-dashed border-gray-400 pb-4 last:border-0">
+                <p className="text-[10px] font-bold text-red-600 uppercase mb-1">{project.category || 'Repository'}</p>
+                <h6 className="font-bold text-sm leading-tight mb-1 hover:underline cursor-pointer">{project.title}</h6>
+                <p className="text-[11px] font-serif italic text-gray-500 line-clamp-2">{project.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const NewPortfolio = ({ projects, profile, skills, education, achievements }) => {
   const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -41,6 +177,66 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
   const [cleanCodeRef, isCleanCodeRevealed] = useScrollReveal();
   const [project1Ref, isProject1Revealed] = useScrollReveal();
   const [project2Ref, isProject2Revealed] = useScrollReveal();
+
+  // ... inside NewPortfolio component, before return ( ...
+
+  // NEW: Newspaper Print Styles
+  const printStyles = `
+    @media print {
+      @page {
+        size: A4;
+        margin: 1cm;
+      }
+      
+      /* HIDE WEB ELEMENTS */
+      nav, .sticky, header button, .print\\:hidden, 
+      footer .md\\:col-span-2, /* Hide Subscribe box */
+      .bg-black.text-white, /* Hide black buttons to save ink */
+      button {
+        display: none !important;
+      }
+
+      /* LAYOUT OVERRIDES */
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 10pt !important; /* Smaller newspaper font */
+      }
+      
+      .min-h-screen {
+        height: auto !important;
+      }
+
+      /* Force images to be visible and look like newsprint */
+      img {
+        filter: grayscale(100%) contrast(150%) !important;
+        opacity: 1 !important; /* Override scroll reveal */
+        transition: none !important;
+      }
+      
+      /* Use CSS Columns for text flow instead of flex/grid where possible */
+      p {
+        text-align: justify;
+        line-height: 1.4;
+      }
+
+      /* Header adjustments */
+      h1 { font-size: 4rem !important; margin-bottom: 1rem !important; }
+      h2 { font-size: 2.5rem !important; }
+
+      /* Prevent awkward breaks */
+      article, .grid, section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* Expand containers */
+      .max-w-\[1200px\] {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+    }
+  `;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,6 +273,15 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
               <span className="material-symbols-outlined text-base">calendar_month</span>
               <span>{currentDate}</span>
             </div>
+            {/* --- NEW PRINT BUTTON --- */}
+            <button 
+              onClick={() => window.print()}
+              className="hidden md:flex items-center gap-2 hover:text-red-600 transition-colors cursor-pointer print:hidden"
+            >
+              <span className="material-symbols-outlined text-base">print</span>
+              <span>Print Physical Edition</span>
+            </button>
+            {/* ------------------------ */}
             <div className="hidden md:flex items-center gap-2">
               <span className="material-symbols-outlined text-base">cloud</span>
               <span>100% chance of shipping</span>
@@ -333,82 +538,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
         </section>
 
         {/* Latest Stories / Projects */}
-        <section id="projects" className="mb-20">
-          <div className="flex justify-between items-end mb-8 border-b-2 border-black pb-4">
-            <h3 className="text-4xl font-bold font-news uppercase">Latest Stories</h3>
-            <a href="#" className="text-sm font-bold uppercase tracking-widest hover:underline mb-1">View Archive &rarr;</a>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            
-            {/* Project 1: Feature Style */}
-            {mainStories[0] && (
-              <article className="group cursor-pointer">
-                <div className="mb-4 overflow-hidden border border-black">
-                  <img ref={project1Ref} src={mainStories[0].image} alt={mainStories[0].title} className={`w-full h-64 object-cover group-hover:scale-105 ${isProject1Revealed ? 'grayscale-0' : 'grayscale'}`} style={{ transition: 'filter 1.5s ease-out, transform 0.5s ease-out' }} />
-                </div>
-                <div className="flex items-center gap-2 mb-3 text-xs font-bold uppercase tracking-widest text-gray-500">
-                  <span>Feature Story</span>
-                  <span>•</span>
-                  <span>{new Date().toLocaleDateString()}</span>
-                </div>
-                <h4 className="text-3xl font-bold leading-tight mb-4 group-hover:underline">{mainStories[0].title}</h4>
-                <p className="text-lg italic font-serif text-gray-600 mb-4">
-                  "{mainStories[0].description.substring(0, 80)}..."
-                </p>
-                <p className="text-sm font-serif text-gray-800 text-justify leading-relaxed mb-4">
-                  {mainStories[0].description}
-                </p>
-                <button className="text-xs font-bold uppercase tracking-widest border-b border-black pb-1 hover:text-gray-600">Read Article</button>
-              </article>
-            )}
-
-            {/* Project 2: Opinion Style */}
-            {mainStories[1] && (
-              <article className="group cursor-pointer border-x border-gray-200 px-0 lg:px-8">
-                <div className="flex items-center gap-2 mb-3 text-xs font-bold uppercase tracking-widest text-gray-500">
-                  <span>Opinion</span>
-                  <span>•</span>
-                  <span>{new Date().toLocaleDateString()}</span>
-                </div>
-                <h4 className="text-4xl font-bold leading-none mb-6 italic font-serif group-hover:underline">
-                  Why {mainStories[1].tech[0]} is the Future of {mainStories[1].category}
-                </h4>
-                <div className="w-12 h-1 bg-black mb-6"></div>
-                <p className="text-lg font-serif text-gray-800 leading-relaxed mb-8">
-                  The debate is over. {mainStories[1].title} proves that {mainStories[1].tech.join(', ')} is not just a luxury; it's a necessity for scaling beyond limits.
-                </p>
-                <div className="mb-6 overflow-hidden border border-black">
-                  <img ref={project2Ref} src={mainStories[1].image} alt={mainStories[1].title} className={`w-full h-48 object-cover transition-all duration-1000 ease-out ${isProject2Revealed ? 'grayscale-0' : 'grayscale'}`} />
-                </div>
-                <button className="text-xs font-bold uppercase tracking-widest border-b border-black pb-1 hover:text-gray-600">Read Op-Ed</button>
-              </article>
-            )}
-
-            {/* Project 3: Case Study Style */}
-            {mainStories[2] && (
-              <article className="group cursor-pointer">
-                 <div className="flex items-center gap-2 mb-3 text-xs font-bold uppercase tracking-widest text-gray-500">
-                  <span>Case Study</span>
-                  <span>•</span>
-                  <span>{new Date().toLocaleDateString()}</span>
-                </div>
-                <div className="bg-[#1a1a1a] p-8 mb-6 relative overflow-hidden group-hover:shadow-xl transition-shadow">
-                  <img src={mainStories[2].image} alt={mainStories[2].title} className="w-full h-auto object-cover opacity-80 mix-blend-overlay" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {/* Abstract graphic placeholder */}
-                    <div className="w-24 h-24 border-2 border-white/20 rounded-full"></div>
-                  </div>
-                </div>
-                <h4 className="text-2xl font-bold mb-3 group-hover:underline">{mainStories[2].title}: A {mainStories[2].tech[0]} Symphony</h4>
-                <p className="text-sm font-serif text-gray-600 mb-4">
-                  How we engineered {mainStories[2].title} using {mainStories[2].tech.join(', ')} without crashing the browser.
-                </p>
-                <button className="text-xs font-bold uppercase tracking-widest border-b border-black pb-1 hover:text-gray-600">View Project</button>
-              </article>
-            )}
-          </div>
-        </section>
+        <ProjectSection projects={projects} />
 
         {/* Classifieds / Skills */}
         {/* Classifieds / Skills */}
