@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import NewPortfolio from './components/NewPortfolio';
 
 import elberImage from './assets/projects/elber-ecommerce.png';
-import trafficResearchImage from './assets/projects/traffic-research.svg';
-import lmsImage from './assets/projects/lms-platform.svg';
+import trafficResearchImage from './assets/projects/traffic-research.png';
+import lmsImage from './assets/projects/lms-platform.png';
 import ceylonImage from './assets/projects/ceylon-herb-care.png';
 import minimedImage from './assets/projects/minimed.png';
 import rfidImage from './assets/projects/rfid-app.png';
@@ -28,12 +28,44 @@ const Portfolio = () => {
     }
   };
 
+  // Skill categories mirror the CV exactly (single source of truth for all skill sections)
   const skills = {
-    frontend: ["React", "Next.js", "React Native", "Angular", "HTML", "CSS/Bootstrap", "Tailwind/MUI", "Figma"],
-    backend: ["Node.js", "NestJS", "Express", "PHP", "Laravel", "Java", "Python", "C", "C++"],
-    database: ["MongoDB", "MySQL", "PostgreSQL", "Firebase", "SQL"],
-    tools: ["Git", "TypeScript", "JavaScript"]
+    "Languages": ["JavaScript", "TypeScript", "Python", "Java", "PHP", "C", "C++", "SQL"],
+    "Frontend": ["React.js", "Next.js", "React Native", "HTML5", "CSS3", "Tailwind CSS", "Bootstrap", "Material UI"],
+    "Backend": ["Node.js", "Express.js", "NestJS", "Flask", "Laravel", "REST APIs"],
+    "Databases": ["MongoDB", "MySQL", "Firebase", "Redis", "Supabase"],
+    "AI & ML": ["PyTorch", "PyTorch Geometric", "Graph Neural Networks", "MAPPO", "Reinforcement Learning", "Bayesian UQ"],
+    "DevOps & Tools": ["Git", "Docker", "Docker Compose", "WebSockets", "JWT", "Agile & Scrum"],
+    "Design & Testing": ["Figma", "Chart.js", "Recharts", "SUMO Simulator", "Jest", "Supertest"]
   };
+
+  // Production, client, and research work — separated from academic projects (issue #11)
+  const experience = [
+    {
+      role: "Full-Stack Developer",
+      org: "Elber E-commerce Platform",
+      type: "Production",
+      summary: "Developed a live e-commerce platform serving real customers — product catalog, shopping cart, and checkout — on a NestJS RESTful API with Mongoose ORM and Firebase Storage for media hosting.",
+      stack: ["NestJS", "Next.js", "MongoDB", "TypeScript"],
+      link: "https://www.elber.lk/"
+    },
+    {
+      role: "Developer",
+      org: "Techart Solutions",
+      type: "Client Work",
+      summary: "Built an enterprise RFID management system covering device configuration, tap processing, and full audit-history management with seamless database integration.",
+      stack: ["Laravel", "MySQL"],
+      link: null
+    },
+    {
+      role: "Final Year Researcher",
+      org: "SLIIT — Published AI Research",
+      type: "Research",
+      summary: "Published final-year research in Multi-Agent Reinforcement Learning and Graph Neural Networks for urban traffic signal control: 81.8% reduction in simulated network waiting time at ~3.17 ms P50 inference latency.",
+      stack: ["PyTorch", "GNN", "MAPPO", "Flask"],
+      link: null
+    }
+  ];
 
   const education = [
     {
@@ -177,12 +209,13 @@ const Portfolio = () => {
   ];
 
   return (
-    <NewPortfolio 
-      projects={projects} 
+    <NewPortfolio
+      projects={projects}
       profile={profile}
       skills={skills}
       education={education}
       achievements={achievements}
+      experience={experience}
     />
   );
 };
