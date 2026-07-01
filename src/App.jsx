@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import NewPortfolio from './components/NewPortfolio';
 
 import elberImage from './assets/projects/elber-ecommerce.png';
-import trafficResearchImage from './assets/projects/traffic-research.svg';
-import lmsImage from './assets/projects/lms-platform.svg';
+import trafficResearchImage from './assets/projects/traffic-research.png';
+import lmsImage from './assets/projects/lms-platform.png';
 import ceylonImage from './assets/projects/ceylon-herb-care.png';
 import minimedImage from './assets/projects/minimed.png';
 import rfidImage from './assets/projects/rfid-app.png';
