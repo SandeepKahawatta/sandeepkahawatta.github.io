@@ -3,6 +3,7 @@ import profileImage from '../assets/my/profile.jpg';
 import cleanCodeImage from '../assets/generated/clean_code_illustration.png';
 import BreakingNews from './BreakingNews';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 const useScrollReveal = () => {
   const [isRevealed, setIsRevealed] = useState(false);
@@ -74,7 +75,13 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
               <div className="flex justify-center gap-4 mb-8 border-y border-black py-2 font-serif italic">
                 <span>By Sandeep Kahawaththa</span>
                 <span>•</span>
-                <span>Published {new Date().toLocaleDateString()}</span>
+                <span>{project.role}</span>
+                {project.category && (
+                  <>
+                    <span>•</span>
+                    <span>{project.category}</span>
+                  </>
+                )}
               </div>
 
               <div className="border-2 border-black p-1 mb-8 relative">
@@ -84,15 +91,25 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
               <div className="columns-1 md:columns-2 gap-8 font-serif text-justify leading-relaxed">
                 <p className="drop-cap text-lg mb-4">{project.description}</p>
-                <div className="mt-6 p-4 bg-gray-100 border-l-4 border-black italic">
-                   "The technical stack involved {project.tech.join(', ')}. This architectural approach ensured maximum efficiency."
+                <div className="mt-6 p-4 bg-gray-100 border-l-4 border-black">
+                   <span className="font-bold uppercase text-xs tracking-widest block mb-1 not-italic">Technical Stack</span>
+                   <span className="italic">{project.tech.join(' · ')}</span>
                 </div>
-                <div className="mt-8 flex flex-col gap-4">
-                  <h4 className="font-bold uppercase tracking-widest border-b border-black text-xs">Repository Access</h4>
-                  <a href="#" className="bg-black text-white text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
-                    Visit Source Code &rarr;
-                  </a>
-                </div>
+                {(project.github || project.link) && (
+                  <div className="mt-8 flex flex-col gap-4">
+                    <h4 className="font-bold uppercase tracking-widest border-b border-black text-xs">Repository Access</h4>
+                    {project.github && (
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" className="bg-black text-white text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
+                        Visit Source Code &rarr;
+                      </a>
+                    )}
+                    {project.link && (
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="border-2 border-black text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
+                        View Live Demo &rarr;
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -277,8 +294,8 @@ const TechnicalSection = ({ cleanCodeRef, cleanCodeImage }) => {
             <div className="mt-6 pt-4 border-t border-black flex items-center gap-3">
                <div className="w-8 h-8 rounded-full bg-gray-300"></div> {/* Author Avatar Placeholder */}
                <div className="text-[10px] uppercase leading-tight">
-                  <p className="font-bold">Sandeep K.</p>
-                  <p className="text-gray-500">Chief Architect</p>
+                  <p className="font-bold">Sandeep Kahawaththa</p>
+                  <p className="text-gray-500">Software Engineer</p>
                </div>
             </div>
           </div>
@@ -492,8 +509,9 @@ const ClassifiedsSection = ({ skills, profile }) => {
         {/* EXTRA: "Horoscope" / Fun Fact to fill space */}
         <div className="break-inside-avoid border-t border-b border-black py-4 mb-8">
             <h5 className="font-bold text-xs uppercase mb-2 flex items-center gap-2">
-                <span className="material-symbols-outlined text-base">auto_awesome</span> 
+                <span className="material-symbols-outlined text-base">auto_awesome</span>
                 Engineering Horoscope
+                <span className="text-[8px] border border-black px-1 font-mono">Satire</span>
             </h5>
             <p className="font-serif text-xs leading-relaxed text-justify">
                 <strong>Today:</strong> Your div will center perfectly on the first try. A deployment will succeed without warnings. Expect good fortune in code reviews.
@@ -512,6 +530,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
   const mainStories = projects.slice(0, 3);
 
   const [activeSection, setActiveSection] = useState('');
+  const [selectedProject, setSelectedProject] = useState(null);
 
   // Scroll Reveal Hooks
   const [profileRef, isProfileRevealed] = useScrollReveal();
@@ -573,7 +592,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
 
       {/* Sticky Navigation & Ticker */}
       <div className="sticky top-0 z-50 bg-[#fcfbf9] dark:bg-[#101622] border-b border-black dark:border-white/20">
-        <div className="w-full border-t border-black dark:border-white/20 border-b border-black dark:border-white/20 py-2 flex justify-center gap-8 md:gap-16 text-sm md:text-base font-bold uppercase tracking-wide font-sans bg-[#fcfbf9] dark:bg-[#101622]">
+        <div className="w-full border-t border-black dark:border-white/20 border-b border-black dark:border-white/20 py-2 px-4 flex justify-start md:justify-center gap-6 md:gap-16 text-sm md:text-base font-bold uppercase tracking-wide font-sans bg-[#fcfbf9] dark:bg-[#101622] overflow-x-auto whitespace-nowrap">
           <a className={`relative group transition-colors duration-300 ${activeSection === 'editorial' ? 'text-red-600' : 'hover:text-red-600'}`} href="#editorial">
             Editorial
             <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-600 transition-all duration-300 ${activeSection === 'editorial' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
@@ -618,14 +637,14 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
                      </div>
 
                      <h2 className="text-5xl md:text-6xl font-black leading-[0.9] mb-6 font-news uppercase tracking-tighter">
-                        Full Stack <br/> Architect <br/>
-                        <span className="italic font-serif font-light">Redefines</span> <br/>
-                        Scalability
+                        Full-Stack <br/> Developer <br/>
+                        <span className="italic font-serif font-light">Publishes</span> <br/>
+                        AI Research
                      </h2>
 
                      <div className="border-l-4 border-black pl-6 py-2 mb-8">
                         <p className="text-lg font-serif leading-relaxed text-gray-800">
-                           By Sandeep K.
+                           {profile.role} — {profile.location}
                         </p>
                      </div>
 
@@ -673,7 +692,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
             </div>
 
             {/* RIGHT COLUMN - Sidebar */}
-            <div className="lg:col-span-3 flex flex-col gap-8 border-l border-black pl-8 hidden lg:flex">
+            <div className="lg:col-span-3 flex flex-col gap-8 border-t-4 border-black pt-8 mt-4 lg:border-t-0 lg:pt-0 lg:mt-0 lg:border-l lg:border-black lg:pl-8">
               
               {/* Education */}
               <div>
@@ -699,20 +718,20 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
                 <p className="text-[10px] font-mono uppercase tracking-widest mb-4 text-gray-400">Help Wanted</p>
                 <h5 className="text-xl font-bold leading-tight mb-2 font-serif">EXPERT ENGINEER FOR HIRE</h5>
                 <p className="text-xs italic text-gray-400 mb-4">Proven track record. Will travel (remotely).</p>
-                <a href="/resume.pdf" download="Sandeep_Kahawatta_CV.pdf" className="inline-block border border-white px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full">
+                <a href="/resume.pdf" download="Sandeep_Kahawaththa_CV.pdf" className="inline-block border border-white px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full">
                   Download Portfolio CV
                 </a>
               </div>
 
               {/* Links */}
               <div className="grid grid-cols-2 gap-4">
-                <a href={profile.contact.linkedin} className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
-                  <div className="text-xl mb-1 group-hover:scale-110 transition-transform"><i className="fab fa-linkedin"></i></div>
+                <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer" className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
+                  <div className="mb-1 flex justify-center group-hover:scale-110 transition-transform"><Linkedin size={20} /></div>
                   <div className="text-[10px] font-bold uppercase tracking-widest">LinkedIn Registry</div>
                   <div className="text-[8px] font-serif italic">Connect Professionally</div>
                 </a>
-                <a href={profile.contact.github} className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
-                  <div className="text-xl mb-1 group-hover:scale-110 transition-transform"><i className="fab fa-github"></i></div>
+                <a href={profile.contact.github} target="_blank" rel="noopener noreferrer" className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
+                  <div className="mb-1 flex justify-center group-hover:scale-110 transition-transform"><Github size={20} /></div>
                   <div className="text-[10px] font-bold uppercase tracking-widest">Github Repository</div>
                   <div className="text-[8px] font-serif italic">Inspect The Source</div>
                 </a>
@@ -726,14 +745,16 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
                  
                  <div className="space-y-6">
                    {achievements.map((achievement, index) => (
-                     <article key={index} className="border-b border-gray-200 pb-4 last:border-0 group cursor-pointer">
+                     <article key={index} className="border-b border-gray-200 pb-4 last:border-0 group">
                        <div className="flex items-center gap-2 mb-2">
                          <span className="text-[10px] font-bold uppercase tracking-widest text-white bg-black px-1">Recognition</span>
-                         <span className="text-[10px] text-gray-500 font-mono">{new Date().getFullYear()}</span>
+                         {achievement.year && (
+                           <span className="text-[10px] text-gray-500 font-mono">{achievement.year}</span>
+                         )}
                        </div>
-                       <h5 className="font-bold text-sm leading-tight mb-2 group-hover:underline">{achievement}</h5>
+                       <h5 className="font-bold text-sm leading-tight mb-2">{achievement.title}</h5>
                        <p className="text-xs font-serif text-gray-600 italic">
-                          Reported by the editorial board.
+                          {achievement.org}
                        </p>
                      </article>
                    ))}
@@ -745,11 +766,16 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
         </section>
 
         {/* Latest Stories / Projects */}
-        <ProjectSection projects={projects} />
+        <ProjectSection projects={projects} onProjectClick={setSelectedProject} />
 
         {/* Classifieds / Skills */}
-        {/* Classifieds / Skills */}
         <ClassifiedsSection skills={skills} profile={profile} />
+
+        <ProjectModal
+          project={selectedProject}
+          isOpen={!!selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
 
       </main>
 
@@ -788,25 +814,25 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements }) =>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-6 border-b border-gray-700 pb-2 text-gray-300">Syndication</h3>
               <ul className="space-y-4">
                 <li>
-                  <a href={profile.contact.github} className="group flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
-                    <span className="bg-white text-black w-6 h-6 flex items-center justify-center rounded-sm text-sm group-hover:scale-110 transition-transform">
-                      <i className="fab fa-github"></i>
+                  <a href={profile.contact.github} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                    <span className="bg-white text-black w-6 h-6 flex items-center justify-center rounded-sm group-hover:scale-110 transition-transform">
+                      <Github size={14} />
                     </span>
                     <span className="font-serif text-sm italic group-hover:underline decoration-1 underline-offset-4">Github Repository</span>
                   </a>
                 </li>
                 <li>
-                  <a href={profile.contact.linkedin} className="group flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
-                    <span className="bg-[#0077b5] text-white w-6 h-6 flex items-center justify-center rounded-sm text-sm group-hover:scale-110 transition-transform">
-                      <i className="fab fa-linkedin-in"></i>
+                  <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                    <span className="bg-[#0077b5] text-white w-6 h-6 flex items-center justify-center rounded-sm group-hover:scale-110 transition-transform">
+                      <Linkedin size={14} />
                     </span>
                     <span className="font-serif text-sm italic group-hover:underline decoration-1 underline-offset-4">LinkedIn Registry</span>
                   </a>
                 </li>
                 <li>
                   <a href={`mailto:${profile.contact.email}`} className="group flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
-                    <span className="bg-gray-700 text-white w-6 h-6 flex items-center justify-center rounded-sm text-sm group-hover:scale-110 transition-transform">
-                      <i className="fas fa-envelope"></i>
+                    <span className="bg-gray-700 text-white w-6 h-6 flex items-center justify-center rounded-sm group-hover:scale-110 transition-transform">
+                      <Mail size={14} />
                     </span>
                     <span className="font-serif text-sm italic group-hover:underline decoration-1 underline-offset-4">Letter to Editor</span>
                   </a>

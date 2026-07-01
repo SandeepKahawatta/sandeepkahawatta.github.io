@@ -11,15 +11,11 @@ const BreakingNews = () => {
       {/* Scrolling Text Container */}
       <div className="flex overflow-hidden w-full relative">
         <div className="animate-marquee whitespace-nowrap flex items-center gap-8 py-2">
-          <span className="text-sm font-mono tracking-wider">
-            LATEST DEPLOY: PORTFOLIO V2 IS LIVE — CRITICS CALL IT "PIXEL PERFECT" — 99.9% UPTIME ACHIEVED THIS QUARTER — NEW FRAMEWORK ADOPTED —
-          </span>
-          <span className="text-sm font-mono tracking-wider">
-            LATEST DEPLOY: PORTFOLIO V2 IS LIVE — CRITICS CALL IT "PIXEL PERFECT" — 99.9% UPTIME ACHIEVED THIS QUARTER — NEW FRAMEWORK ADOPTED —
-          </span>
-          <span className="text-sm font-mono tracking-wider">
-             LATEST DEPLOY: PORTFOLIO V2 IS LIVE — CRITICS CALL IT "PIXEL PERFECT" — 99.9% UPTIME ACHIEVED THIS QUARTER — NEW FRAMEWORK ADOPTED —
-          </span>
+          {[0, 1, 2].map((i) => (
+            <span key={i} className="text-sm font-mono tracking-wider">
+              RESEARCH: NOVEL AI SIGNAL CONTROL CUTS SIMULATED URBAN TRAFFIC WAITING TIME BY 81.8% — ELBER E-COMMERCE PLATFORM LIVE IN PRODUCTION — MULTI-ROLE LMS SHIPS WITH REAL-TIME CHAT &amp; ANTI-FRAUD QR ATTENDANCE — NOW ACCEPTING FREELANCE &amp; FULL-TIME OPPORTUNITIES —
+            </span>
+          ))}
         </div>
       </div>
     </div>
