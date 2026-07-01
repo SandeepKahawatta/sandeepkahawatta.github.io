@@ -98,3 +98,23 @@
 .animate-marquee {
     animation: marquee 30s linear infinite;
 }
+
+/* Let readers stop the ticker to read it */
+.animate-marquee:hover,
+.animate-marquee:focus-within {
+    animation-play-state: paused;
+}
+
+/* Respect users who opt out of motion */
+@media (prefers-reduced-motion: reduce) {
+    .animate-marquee {
+        animation: none;
+    }
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
