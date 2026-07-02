@@ -181,8 +181,10 @@ const ProjectSection = ({ projects, onProjectClick }) => {
         ))}
       </div>
 
-      {/* ============ ARTICLE GRID — flat editorial cards ============ */}
-      <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+      {/* ============ ARTICLE GRID — flat editorial cards with column rules ============ */}
+      {/* Negative margins offset the per-card padding so outer edges stay aligned,
+          while vertical rules sit centered in each gutter like real newsprint columns */}
+      <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-y-12 sm:-mx-4 lg:-mx-6">
         <AnimatePresence mode="popLayout">
           {articles.map((project, idx) => (
             <motion.article
@@ -192,7 +194,11 @@ const ProjectSection = ({ projects, onProjectClick }) => {
               animate={{ opacity: 1, y: 0, transition: { delay: (idx % 3) * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               onClick={() => onProjectClick(project)}
-              className="group cursor-pointer flex flex-col"
+              className={`group cursor-pointer flex flex-col sm:px-4 lg:px-6 border-black/20 ${
+                idx % 2 === 1 ? 'sm:border-l' : 'sm:border-l-0'
+              } ${
+                idx % 3 === 0 ? 'lg:border-l-0' : 'lg:border-l'
+              }`}
             >
               {/* Image: grayscale print that colorizes on hover */}
               <div className="relative overflow-hidden mb-4 border border-black/10">
