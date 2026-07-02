@@ -58,7 +58,7 @@ const departments = (skills) => [
 
 const TechnicalSection = ({ skills }) => {
   return (
-    <section id="skills" className="mb-20 border-t-8 border-black pt-4 scroll-mt-24">
+    <section id="skills" className="border-t-8 border-black pt-4 scroll-mt-24">
 
       {/* SECTION MASTHEAD */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b-4 border-black pb-2 mb-8 gap-4">
