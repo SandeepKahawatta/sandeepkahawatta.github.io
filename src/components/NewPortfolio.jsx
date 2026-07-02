@@ -11,6 +11,7 @@ import ClassifiedsSection from './ClassifiedsSection';
 import ContactSection from './ContactSection';
 import ProjectModal from './ProjectModal';
 import Footer from './Footer';
+import WelcomeSplash from './WelcomeSplash';
 import { useActiveSection } from '../hooks/useActiveSection';
 
 const SECTION_IDS = ['editorial', 'experience', 'projects', 'classifieds', 'contact'];
@@ -22,6 +23,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements, expe
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-[#fcfbf9] text-[#0d121b] font-news selection:bg-black selection:text-white">
+        <WelcomeSplash />
         <Header />
         <Navbar activeSection={activeSection} />
 
