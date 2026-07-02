@@ -1,4 +1,4 @@
-import cleanCodeImage from '../assets/generated/clean_code_illustration.png';
+import cleanCodeImage from '../assets/generated/clean_code_illustration.webp';
 
 const TechnicalSection = ({ skills }) => {
   const tagList = (category, count = 4) => (skills[category] || []).slice(0, count);
