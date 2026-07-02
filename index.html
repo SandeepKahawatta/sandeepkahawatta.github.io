@@ -68,26 +68,90 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css" />
+
+  <!-- Styles the static crawler fallback so the pre-React frame looks like a deliberate
+       "printing" placeholder instead of unstyled text. React replaces #root content on mount. -->
+  <style>
+    .prepress {
+      min-height: 100vh;
+      background: #fcfbf9;
+      color: #0d121b;
+      font-family: Georgia, 'Times New Roman', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .prepress-sheet {
+      max-width: 620px;
+      text-align: center;
+      border-top: 4px solid #0d121b;
+      border-bottom: 4px solid #0d121b;
+      padding: 28px 8px;
+    }
+    .prepress-kicker {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin: 0 0 12px;
+    }
+    .prepress h1 {
+      font-size: clamp(40px, 8vw, 64px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin: 0 0 6px;
+    }
+    .prepress-printing {
+      font-style: italic;
+      font-size: 14px;
+      color: #6b7280;
+      margin: 0 0 20px;
+    }
+    .prepress-summary {
+      font-size: 12px;
+      line-height: 1.7;
+      color: #4b5563;
+      text-align: justify;
+      margin: 0 0 12px;
+      border-top: 1px solid #0d121b;
+      padding-top: 14px;
+    }
+    .prepress-contact {
+      font-size: 12px;
+      color: #4b5563;
+      margin: 0;
+    }
+    .prepress a { color: #0d121b; }
+  </style>
 </head>
 
 <body>
   <div id="root">
-    <!-- Static fallback for crawlers that don't execute JavaScript. React replaces this on load. -->
-    <main>
-      <h1>Sandeep Kahawaththa — Freelance Software Developer &amp; Full-Stack Engineer, Sri Lanka</h1>
-      <p>
-        Full-stack software developer specializing in web applications (React, Next.js, NestJS, Node.js,
-        TypeScript), mobile apps (React Native), and AI/ML solutions. Published final-year researcher in
-        Multi-Agent Reinforcement Learning and Graph Neural Networks — 81.8% reduction in simulated urban
-        traffic waiting time. Production experience includes a live e-commerce platform, a multi-role
-        learning management system, and enterprise client systems.
-      </p>
-      <p>
-        Available for freelance software development projects and full-time software engineering roles.
-        Contact: <a href="mailto:sandeepkahawatta9@gmail.com">sandeepkahawatta9@gmail.com</a> ·
-        <a href="https://github.com/SandeepKahawatta">GitHub</a> ·
-        <a href="http://www.linkedin.com/in/sandeep-kahawatta-a7b5a8216">LinkedIn</a>
-      </p>
+    <!-- Static fallback for crawlers that don't execute JavaScript. React replaces this on load;
+         until then it renders as a newspaper "printing" placeholder (see .prepress styles). -->
+    <main class="prepress">
+      <div class="prepress-sheet">
+        <p class="prepress-kicker">Vol. 404 • Final Edition</p>
+        <h1>The Daily Dev</h1>
+        <p class="prepress-printing">Printing today's edition&hellip;</p>
+        <p class="prepress-summary">
+          <strong>Sandeep Kahawaththa — Freelance Software Developer &amp; Full-Stack Engineer, Sri Lanka.</strong>
+          Full-stack software developer specializing in web applications (React, Next.js, NestJS, Node.js,
+          TypeScript), mobile apps (React Native), and AI/ML solutions. Published final-year researcher in
+          Multi-Agent Reinforcement Learning and Graph Neural Networks — 81.8% reduction in simulated urban
+          traffic waiting time. Production experience includes a live e-commerce platform, a multi-role
+          learning management system, and enterprise client systems.
+        </p>
+        <p class="prepress-contact">
+          Available for freelance projects and full-time roles ·
+          <a href="mailto:sandeepkahawatta9@gmail.com">sandeepkahawatta9@gmail.com</a> ·
+          <a href="https://github.com/SandeepKahawatta">GitHub</a> ·
+          <a href="http://www.linkedin.com/in/sandeep-kahawatta-a7b5a8216">LinkedIn</a>
+        </p>
+      </div>
     </main>
   </div>
   <script type="module" src="/src/main.jsx"></script>
