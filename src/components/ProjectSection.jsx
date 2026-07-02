@@ -23,6 +23,9 @@ const stampIn = {
 
 const viewportOnce = { once: true, margin: '-60px' };
 
+// How many article cards are visible before "Load more stories"
+const PAGE_SIZE = 6;
+
 // Newspaper "desks": broad groups derived from project categories
 const DESKS = ['All Desks', 'Production & Clients', 'AI Research', 'Web Apps', 'Mobile'];
 
@@ -42,13 +45,23 @@ const deskOf = (project) => {
 
 const ProjectSection = ({ projects, onProjectClick }) => {
   const [activeDesk, setActiveDesk] = useState('All Desks');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Flagship stays pinned as the splash story; the rest fill the article grid
   const flagship = projects[0];
-  const articles = useMemo(() => {
+
+  const filtered = useMemo(() => {
     const rest = projects.slice(1);
     return activeDesk === 'All Desks' ? rest : rest.filter(p => deskOf(p) === activeDesk);
   }, [projects, activeDesk]);
+
+  const articles = filtered.slice(0, visibleCount);
+  const remaining = filtered.length - articles.length;
+
+  const selectDesk = (desk) => {
+    setActiveDesk(desk);
+    setVisibleCount(PAGE_SIZE); // fresh page per desk
+  };
 
   return (
     <section id="projects" className="mb-20 border-t-8 border-black pt-4 scroll-mt-24">
@@ -80,7 +93,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
         viewport={viewportOnce}
         variants={settleIn}
         onClick={() => onProjectClick(flagship)}
-        className="group cursor-pointer border-2 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-12 grid md:grid-cols-12 overflow-hidden"
+        className="group cursor-pointer border-2 border-black bg-white mb-12 grid md:grid-cols-12 overflow-hidden"
       >
         {/* Image side */}
         <div className="md:col-span-7 relative border-b-2 md:border-b-0 md:border-r-2 border-black overflow-hidden">
@@ -93,7 +106,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
           <motion.span
             variants={stampIn}
             custom={0.35}
-            className="absolute top-4 left-4 bg-red-600 text-white text-[10px] md:text-xs font-black uppercase tracking-widest px-3 py-1 -rotate-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)]"
+            className="absolute top-4 left-4 bg-red-600 text-white text-[10px] md:text-xs font-black uppercase tracking-widest px-3 py-1 -rotate-3"
           >
             {flagship.category} — Special Report
           </motion.span>
@@ -115,7 +128,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
                   key={stat.label}
                   variants={stampIn}
                   custom={0.15 + idx * 0.12}
-                  className="border-2 border-black p-2 text-center bg-[#fcfbf9] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-300 hover:-translate-y-1"
+                  className="border border-black p-2 text-center bg-[#fcfbf9] transition-transform duration-300 hover:-translate-y-1"
                 >
                   <p className="text-lg md:text-xl font-black leading-none">{stat.value}</p>
                   <p className="text-[8px] md:text-[9px] font-mono uppercase tracking-wider mt-1 text-gray-600">{stat.label}</p>
@@ -143,14 +156,14 @@ const ProjectSection = ({ projects, onProjectClick }) => {
       </motion.article>
 
       {/* ============ DESK TABS (filter) ============ */}
-      <div className="border-y-2 border-black mb-8 flex items-center gap-4 md:gap-8 overflow-x-auto whitespace-nowrap px-1" role="group" aria-label="Filter projects by desk">
+      <div className="border-y-2 border-black mb-10 flex items-center gap-4 md:gap-8 overflow-x-auto whitespace-nowrap px-1" role="group" aria-label="Filter projects by desk">
         <span className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-2 py-1 my-2 shrink-0 hidden md:inline">
           News Desks
         </span>
         {DESKS.map((desk) => (
           <button
             key={desk}
-            onClick={() => setActiveDesk(desk)}
+            onClick={() => selectDesk(desk)}
             aria-pressed={activeDesk === desk}
             className={`relative py-3 text-[11px] md:text-xs font-mono uppercase tracking-widest transition-colors ${
               activeDesk === desk ? 'text-red-600 font-bold' : 'text-gray-600 hover:text-black'
@@ -168,73 +181,79 @@ const ProjectSection = ({ projects, onProjectClick }) => {
         ))}
       </div>
 
-      {/* ============ ARTICLE GRID ============ */}
-      <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* ============ ARTICLE GRID — flat editorial cards ============ */}
+      <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
         <AnimatePresence mode="popLayout">
           {articles.map((project, idx) => (
             <motion.article
               layout
               key={project.title}
-              initial={{ opacity: 0, y: 24, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1, transition: { delay: (idx % 3) * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
-              exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.2 } }}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: (idx % 3) * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
               onClick={() => onProjectClick(project)}
-              className="group cursor-pointer border border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-[box-shadow,transform] duration-300 flex flex-col"
+              className="group cursor-pointer flex flex-col"
             >
               {/* Image: grayscale print that colorizes on hover */}
-              <div className="relative border-b border-black overflow-hidden">
+              <div className="relative overflow-hidden mb-4 border border-black/10">
                 <img
                   src={project.image}
                   alt={`Screenshot of ${project.title}`}
-                  className="w-full aspect-video object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                  className="w-full aspect-[4/3] object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-[1.03]"
                 />
                 <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
               </div>
 
-              <div className="p-4 flex flex-col flex-grow">
-                {/* Kicker row */}
-                <p className="flex justify-between items-baseline text-[10px] font-mono uppercase tracking-widest mb-2">
-                  <span className="font-bold text-red-600">{project.category}</span>
-                  <span className="text-gray-400">Page C{idx + 2}</span>
-                </p>
+              {/* Kicker: dot + category */}
+              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-800 mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-black inline-block" aria-hidden="true"></span>
+                {project.category}
+              </p>
 
-                <h4 className="font-black text-lg leading-tight mb-2">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onProjectClick(project); }}
-                    className="text-left group-hover:underline focus:underline decoration-red-600 decoration-2 underline-offset-2"
-                  >
-                    {project.title}
-                  </button>
-                </h4>
+              <h4 className="font-black text-2xl leading-tight mb-2 font-news">
+                <button
+                  onClick={(e) => { e.stopPropagation(); onProjectClick(project); }}
+                  className="text-left group-hover:underline focus:underline decoration-red-600 decoration-2 underline-offset-4"
+                >
+                  {project.title}
+                </button>
+              </h4>
 
-                <p className="font-serif text-sm text-gray-700 leading-relaxed line-clamp-3 mb-4">
-                  {project.description}
-                </p>
+              <p className="font-serif text-sm text-gray-700 leading-relaxed line-clamp-3 mb-4">
+                {project.description}
+              </p>
 
-                {/* Footer rule: tech + read */}
-                <div className="mt-auto pt-3 border-t border-dashed border-gray-400 flex items-center justify-between gap-2">
-                  <span className="text-[9px] font-mono uppercase text-gray-500 truncate">
-                    {project.tech.slice(0, 3).join(' · ')}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest shrink-0 group-hover:text-red-600 transition-colors">
-                    Read <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
-                  </span>
-                </div>
+              <div className="mt-auto flex flex-wrap gap-1.5">
+                {project.tech.slice(0, 3).map(t => (
+                  <span key={t} className="text-[10px] border border-black bg-white px-2 py-0.5 font-mono uppercase">{t}</span>
+                ))}
               </div>
             </motion.article>
           ))}
         </AnimatePresence>
       </motion.div>
 
-      {/* Archive pointer */}
-      <div className="text-center mt-10 border-t border-black pt-4">
+      {/* ============ LOAD MORE / ARCHIVE ============ */}
+      <div className="text-center mt-12 border-t border-black pt-6 flex flex-col items-center gap-4">
+        {remaining > 0 ? (
+          <button
+            onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
+            className="border-2 border-black px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
+          >
+            Load More Stories ({remaining} in the archive)
+          </button>
+        ) : (
+          <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500">
+            — End of the {activeDesk === 'All Desks' ? 'edition' : `${activeDesk} desk`} —
+          </p>
+        )}
         <a
           href="https://github.com/SandeepKahawatta?tab=repositories"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs font-serif italic text-gray-600 hover:text-red-600 transition-colors"
         >
-          — More stories in the archive, page C4 &rarr;
+          Browse the full archive on GitHub &rarr;
         </a>
       </div>
     </section>
