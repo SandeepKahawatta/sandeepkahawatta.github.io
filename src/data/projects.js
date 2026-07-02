@@ -1,13 +1,13 @@
-import trafficResearchImage from '../assets/projects/traffic-research.png';
-import elberImage from '../assets/projects/elber-ecommerce.png';
-import lmsImage from '../assets/projects/lms-platform.png';
-import minimedImage from '../assets/projects/minimed.png';
-import ceylonImage from '../assets/projects/ceylon-herb-care.png';
-import financeImage from '../assets/projects/finance-tracker.png';
-import evotingImage from '../assets/projects/evoting.png';
-import rfidImage from '../assets/projects/rfid-app.png';
-import fashionImage from '../assets/projects/fashion-globe.png';
-import cleancityImage from '../assets/projects/cleancity.png';
+import trafficResearchImage from '../assets/projects/traffic-research.webp';
+import elberImage from '../assets/projects/elber-ecommerce.webp';
+import lmsImage from '../assets/projects/lms-platform.webp';
+import minimedImage from '../assets/projects/minimed.webp';
+import ceylonImage from '../assets/projects/ceylon-herb-care.webp';
+import financeImage from '../assets/projects/finance-tracker.webp';
+import evotingImage from '../assets/projects/evoting.webp';
+import rfidImage from '../assets/projects/rfid-app.webp';
+import fashionImage from '../assets/projects/fashion-globe.webp';
+import cleancityImage from '../assets/projects/cleancity.webp';
 
 // NOTE: link = live demo URL, github = repository URL.
 // Set to null until the real URL is added — the UI hides buttons for null links.
@@ -19,6 +19,11 @@ export const projects = [
     role: "Final Year Researcher",
     description: "Designed UQ-RecurrentHGAT, a novel AI architecture fusing Heterogeneous Graph Attention Networks with Multi-Agent Proximal Policy Optimization (MAPPO) for real-time adaptive signal control across entire city networks. Benchmarked against SUMO actuated baselines: 81.8% reduction in average network waiting time, 62.2% reduction in queue length, and 79.7% reduction in total weighted cost, with ~3.17 ms P50 inference latency validating edge-computing deployment.",
     tech: ["Python", "PyTorch", "PyTorch Geometric", "GNN", "MAPPO", "Flask", "Redis", "Docker", "SUMO"],
+    stats: [
+      { value: "-81.8%", label: "Waiting time" },
+      { value: "-62.2%", label: "Queue length" },
+      { value: "~3.17ms", label: "P50 inference" }
+    ],
     link: null,
     github: null,
     image: trafficResearchImage
