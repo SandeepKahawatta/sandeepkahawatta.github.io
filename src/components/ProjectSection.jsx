@@ -67,14 +67,14 @@ const ProjectSection = ({ projects, onProjectClick }) => {
     <section id="projects" className="mb-20 border-t-8 border-black pt-4 scroll-mt-24">
 
       {/* SECTION MASTHEAD — consistent with Field Reports / Technical Review */}
-      <div className="flex flex-col md:flex-row justify-between items-end border-b-4 border-black pb-2 mb-2 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b-4 border-black pb-2 mb-2 gap-4">
         <div>
           <h5 className="font-mono text-xs uppercase tracking-widest text-gray-600 mb-1">Section C</h5>
           <h3 className="text-5xl md:text-6xl font-black font-news uppercase tracking-tighter leading-none">
             Technical<br/>Gazette
           </h3>
         </div>
-        <div className="text-right font-serif italic text-sm text-gray-600 max-w-md">
+        <div className="text-left md:text-right font-serif italic text-sm text-gray-600 max-w-md">
           Headline stories from the project archive — open any article for the full technical supplement.
         </div>
       </div>
@@ -93,10 +93,10 @@ const ProjectSection = ({ projects, onProjectClick }) => {
         viewport={viewportOnce}
         variants={settleIn}
         onClick={() => onProjectClick(flagship)}
-        className="group cursor-pointer border-2 border-black bg-white mb-12 grid md:grid-cols-12 overflow-hidden"
+        className="group cursor-pointer mb-12 grid md:grid-cols-12 gap-6 md:gap-10"
       >
         {/* Image side */}
-        <div className="md:col-span-7 relative border-b-2 md:border-b-0 md:border-r-2 border-black overflow-hidden">
+        <div className="md:col-span-7 relative border border-black/10 overflow-hidden">
           <img
             src={flagship.image}
             alt={`Screenshot of ${flagship.title}`}
@@ -113,7 +113,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
         </div>
 
         {/* Story side */}
-        <div className="md:col-span-5 p-6 md:p-8 flex flex-col">
+        <div className="md:col-span-5 flex flex-col">
           <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-3 border-b border-dashed border-gray-400 pb-2">
             Front Page • {flagship.role}
           </p>
@@ -173,7 +173,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
             {activeDesk === desk && (
               <motion.span
                 layoutId="desk-underline"
-                className="absolute left-0 right-0 bottom-0 h-[3px] bg-red-600"
+                className="absolute left-0 right-0 bottom-2 h-[2px] bg-red-600"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}
