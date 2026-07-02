@@ -69,35 +69,36 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-4xl max-h-[90vh] bg-[#fcfbf9] border-4 border-black shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] overflow-y-auto overflow-x-hidden p-6 md:p-12"
+            className="relative w-full max-w-4xl max-h-[85vh] bg-[#fcfbf9] border-4 border-black shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] overflow-y-auto overflow-x-hidden"
           >
-            {/* Close Button */}
-            <button
-              ref={closeButtonRef}
-              onClick={onClose}
-              aria-label="Close project details"
-              className="absolute top-4 right-4 font-black text-2xl hover:text-red-600 transition-colors"
-            >
-              [ CLOSE ]
-            </button>
-
-            {/* Newspaper Header inside Modal */}
-            <div className="text-center border-b-2 border-black pb-4 mb-8">
-              <h2 className="text-sm font-mono uppercase tracking-[0.3em]">Special Technical Supplement</h2>
+            {/* Sticky masthead: label + close button — never overlaps content, always reachable */}
+            <div className="sticky top-0 z-10 bg-[#fcfbf9] border-b-2 border-black px-4 md:px-12 py-3 flex items-center justify-between gap-4">
+              <h2 className="text-[10px] md:text-sm font-mono uppercase tracking-[0.2em] md:tracking-[0.3em] truncate">
+                Special Technical Supplement
+              </h2>
+              <button
+                ref={closeButtonRef}
+                onClick={onClose}
+                aria-label="Close project details"
+                className="font-black text-sm md:text-lg hover:text-red-600 transition-colors whitespace-nowrap shrink-0"
+              >
+                [ CLOSE ]
+              </button>
             </div>
 
+            <div className="p-4 md:p-12">
             <div className="max-w-2xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-6 text-center tracking-tighter">
+              <h1 className="text-3xl md:text-5xl font-black uppercase leading-none mb-6 text-center tracking-tighter">
                 {project.title}
               </h1>
 
-              <div className="flex justify-center gap-4 mb-8 border-y border-black py-2 font-serif italic">
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-8 border-y border-black py-2 font-serif italic text-sm md:text-base">
                 <span>By Sandeep Kahawaththa</span>
-                <span>•</span>
+                <span className="hidden md:inline">•</span>
                 <span>{project.role}</span>
                 {project.category && (
                   <>
-                    <span>•</span>
+                    <span className="hidden md:inline">•</span>
                     <span>{project.category}</span>
                   </>
                 )}
@@ -108,11 +109,26 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
               </div>
 
+              {project.stats && (
+                <div className="grid grid-cols-3 gap-3 mb-8">
+                  {project.stats.map((stat) => (
+                    <div key={stat.label} className="border-2 border-black p-2 text-center bg-white">
+                      <p className="text-lg md:text-2xl font-black leading-none">{stat.value}</p>
+                      <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider mt-1 text-gray-600">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="columns-1 md:columns-2 gap-8 font-serif text-justify leading-relaxed">
                 <p className="drop-cap text-lg mb-4">{project.description}</p>
                 <div className="mt-6 p-4 bg-gray-100 border-l-4 border-black">
-                   <span className="font-bold uppercase text-xs tracking-widest block mb-1 not-italic">Technical Stack</span>
-                   <span className="italic">{project.tech.join(' · ')}</span>
+                   <span className="font-bold uppercase text-xs tracking-widest block mb-2">Technical Stack</span>
+                   <span className="flex flex-wrap gap-2">
+                     {project.tech.map(t => (
+                       <span key={t} className="text-[10px] border border-black bg-white px-2 py-0.5 font-mono uppercase">{t}</span>
+                     ))}
+                   </span>
                 </div>
                 {(project.github || project.link) && (
                   <div className="mt-8 flex flex-col gap-4">
@@ -130,6 +146,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                   </div>
                 )}
               </div>
+            </div>
             </div>
           </motion.div>
         </div>

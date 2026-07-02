@@ -34,17 +34,27 @@ const ProjectSection = ({ projects, onProjectClick }) => {
             onClick={() => onProjectClick(orderedProjects[0])}
           >
             <motion.div layoutId={`img-${orderedProjects[0].title}`} className="relative mb-4 overflow-hidden border border-black p-1 bg-white">
-              <div className="relative">
+              <div className="relative overflow-hidden">
                 <img
                   src={orderedProjects[0].image}
                   alt={`Screenshot of ${orderedProjects[0].title}`}
-                  className="w-full transition-all duration-700 aspect-video object-cover"
+                  className="w-full transition-transform duration-700 aspect-video object-cover group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
               </div>
             </motion.div>
             <span className="text-xs font-bold bg-red-600 text-white px-2 py-0.5 uppercase mb-2 inline-block">{orderedProjects[0].category || 'Special Report'}</span>
             <h2 className="text-4xl font-black leading-none mb-4 group-hover:underline">{orderedProjects[0].title}</h2>
+            {orderedProjects[0].stats && (
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                {orderedProjects[0].stats.map((stat) => (
+                  <div key={stat.label} className="border-2 border-black p-2 text-center bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                    <p className="text-xl md:text-2xl font-black leading-none">{stat.value}</p>
+                    <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider mt-1 text-gray-600">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
             <p className="font-serif text-lg leading-relaxed mb-4 text-justify">
               <span className="float-left text-6xl font-black mr-3 mt-1 leading-none">T</span>
               {orderedProjects[0].description}
@@ -74,8 +84,8 @@ const ProjectSection = ({ projects, onProjectClick }) => {
                    <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
                      <span className="bg-white text-[10px] font-bold px-2 py-1 uppercase border border-black">Read Article</span>
                    </div>
-                   <div className="relative">
-                     <img src={project.image} alt={`Screenshot of ${project.title}`} className="w-full transition-all aspect-square object-cover" />
+                   <div className="relative overflow-hidden">
+                     <img src={project.image} alt={`Screenshot of ${project.title}`} className="w-full transition-transform duration-500 aspect-square object-cover group-hover:scale-105" />
                      <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
                    </div>
                 </motion.div>
@@ -128,15 +138,26 @@ const ProjectSection = ({ projects, onProjectClick }) => {
                       ↺
                     </button>
                   </p>
-                  <h6 className="font-bold text-sm leading-tight mb-1">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); onProjectClick(project); }}
-                      className="text-left hover:underline focus:underline"
-                    >
-                      {project.title}
-                    </button>
-                  </h6>
-                  <p className="text-xs font-serif italic text-gray-600 line-clamp-2">{project.description}</p>
+                  <div className="flex gap-3">
+                    <div className="w-14 h-14 shrink-0 border border-black p-0.5 bg-white">
+                      <img
+                        src={project.image}
+                        alt=""
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <h6 className="font-bold text-sm leading-tight mb-1">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onProjectClick(project); }}
+                          className="text-left hover:underline focus:underline"
+                        >
+                          {project.title}
+                        </button>
+                      </h6>
+                      <p className="text-xs font-serif italic text-gray-600 line-clamp-2">{project.description}</p>
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
