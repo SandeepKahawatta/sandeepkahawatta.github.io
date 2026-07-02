@@ -44,6 +44,53 @@ const Sidebar = ({ education, achievements, profile }) => {
         </a>
       </div>
 
+      {/* By the Numbers — the strongest facts at a glance */}
+      <div className="border-2 border-black">
+        <h4 className="bg-black text-white text-center text-xs font-black uppercase tracking-widest py-1.5">
+          By the Numbers
+        </h4>
+        <div className="grid grid-cols-2">
+          {[
+            { value: '10+', label: 'Projects shipped' },
+            { value: '1', label: 'Production platform live' },
+            { value: '1', label: 'Published AI paper' },
+            { value: '81.8%', label: 'Traffic wait-time cut' }
+          ].map((stat, idx) => (
+            <div
+              key={stat.label}
+              className={`p-3 text-center ${idx % 2 === 0 ? 'border-r' : ''} ${idx < 2 ? 'border-b' : ''} border-black/20`}
+            >
+              <p className="text-2xl font-black font-news leading-none">{stat.value}</p>
+              <p className="text-[9px] font-mono uppercase tracking-wider mt-1 text-gray-600">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* The Paper's Index — quick navigation, newspaper style */}
+      <div>
+        <div className="border-b-2 border-black mb-3 pb-1 text-center">
+          <h4 className="font-news text-2xl font-bold">Index</h4>
+        </div>
+        <ul className="font-serif text-sm">
+          {[
+            { label: 'Field Reports (Experience)', page: 'A1', href: '#experience' },
+            { label: 'Technical Review (Skills)', page: 'B1', href: '#skills' },
+            { label: 'Technical Gazette (Projects)', page: 'C1', href: '#projects' },
+            { label: 'Classifieds (All Skills)', page: 'C4', href: '#classifieds' },
+            { label: 'Letters to the Editor (Hire)', page: 'D1', href: '#contact' }
+          ].map((item) => (
+            <li key={item.href}>
+              <a href={item.href} className="flex items-end gap-1 py-1.5 group">
+                <span className="group-hover:text-red-600 group-hover:underline transition-colors">{item.label}</span>
+                <span className="flex-grow border-b-2 border-dotted border-gray-300 mb-1"></span>
+                <span className="font-mono text-[10px] text-gray-500 group-hover:text-red-600">{item.page}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Hall of Fame (Achievements) */}
       <div className="mt-8 border-t-2 border-black pt-8" id="achievements">
          <div className="border-b-2 border-black mb-6 pb-1">
