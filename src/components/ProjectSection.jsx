@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Print-inspired motion: pages settle into place, stamps hit paper.
 const settleIn = {
@@ -23,21 +23,32 @@ const stampIn = {
 
 const viewportOnce = { once: true, margin: '-60px' };
 
+// Newspaper "desks": broad groups derived from project categories
+const DESKS = ['All Desks', 'Production & Clients', 'AI Research', 'Web Apps', 'Mobile'];
+
+const deskOf = (project) => {
+  switch (project.category) {
+    case 'Production':
+    case 'Client Work':
+      return 'Production & Clients';
+    case 'AI Research':
+      return 'AI Research';
+    case 'Mobile App':
+      return 'Mobile';
+    default:
+      return 'Web Apps';
+  }
+};
+
 const ProjectSection = ({ projects, onProjectClick }) => {
-  // Local state manages the visual order so any card can be promoted to the headline slot
-  const [orderedProjects, setOrderedProjects] = useState(projects);
+  const [activeDesk, setActiveDesk] = useState('All Desks');
 
-  useEffect(() => {
-    setOrderedProjects(projects);
-  }, [projects]);
-
-  const promoteToHeadline = (indexToPromote) => {
-    const newOrder = [...orderedProjects];
-    [newOrder[0], newOrder[indexToPromote]] = [newOrder[indexToPromote], newOrder[0]];
-    setOrderedProjects(newOrder);
-  };
-
-  const headline = orderedProjects[0];
+  // Flagship stays pinned as the splash story; the rest fill the article grid
+  const flagship = projects[0];
+  const articles = useMemo(() => {
+    const rest = projects.slice(1);
+    return activeDesk === 'All Desks' ? rest : rest.filter(p => deskOf(p) === activeDesk);
+  }, [projects, activeDesk]);
 
   return (
     <section id="projects" className="mb-20 border-t-8 border-black pt-4 scroll-mt-24">
@@ -51,7 +62,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
           </h3>
         </div>
         <div className="text-right font-serif italic text-sm text-gray-600 max-w-md">
-          Headline stories from the project archive — tap any article for the full technical supplement.
+          Headline stories from the project archive — open any article for the full technical supplement.
         </div>
       </div>
 
@@ -62,103 +73,132 @@ const ProjectSection = ({ projects, onProjectClick }) => {
         <span>Page C1</span>
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-8">
-
-        {/* === LEFT: MAIN HEADLINE (Always Index 0 of our state) === */}
-        <div className="lg:col-span-7 border-r border-black/10 pr-0 lg:pr-8">
-          <motion.article
-            layout
-            transition={{ type: "spring", stiffness: 50, damping: 20 }}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            variants={settleIn}
-            className="group cursor-pointer"
-            onClick={() => onProjectClick(headline)}
+      {/* ============ FRONT-PAGE SPLASH: the flagship story ============ */}
+      <motion.article
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={settleIn}
+        onClick={() => onProjectClick(flagship)}
+        className="group cursor-pointer border-2 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-12 grid md:grid-cols-12 overflow-hidden"
+      >
+        {/* Image side */}
+        <div className="md:col-span-7 relative border-b-2 md:border-b-0 md:border-r-2 border-black overflow-hidden">
+          <img
+            src={flagship.image}
+            alt={`Screenshot of ${flagship.title}`}
+            className="w-full h-full aspect-video md:aspect-auto object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
+          <motion.span
+            variants={stampIn}
+            custom={0.35}
+            className="absolute top-4 left-4 bg-red-600 text-white text-[10px] md:text-xs font-black uppercase tracking-widest px-3 py-1 -rotate-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)]"
           >
-            <motion.div layoutId={`img-${headline.title}`} className="relative mb-4 overflow-hidden border border-black p-1 bg-white">
-              <div className="relative overflow-hidden">
-                <img
-                  src={headline.image}
-                  alt={`Screenshot of ${headline.title}`}
-                  className="w-full transition-transform duration-700 aspect-video object-cover group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
-                {/* Corner stamp */}
-                <motion.span
+            {flagship.category} — Special Report
+          </motion.span>
+        </div>
+
+        {/* Story side */}
+        <div className="md:col-span-5 p-6 md:p-8 flex flex-col">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-3 border-b border-dashed border-gray-400 pb-2">
+            Front Page • {flagship.role}
+          </p>
+          <h2 className="text-3xl md:text-4xl font-black leading-none tracking-tight mb-4 decoration-red-600 decoration-4 underline-offset-4 group-hover:underline">
+            {flagship.title}
+          </h2>
+
+          {flagship.stats && (
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {flagship.stats.map((stat, idx) => (
+                <motion.div
+                  key={stat.label}
                   variants={stampIn}
-                  custom={0.35}
-                  className="absolute top-3 right-3 bg-red-600 text-white text-[10px] md:text-xs font-black uppercase tracking-widest px-3 py-1 -rotate-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.9)]"
+                  custom={0.15 + idx * 0.12}
+                  className="border-2 border-black p-2 text-center bg-[#fcfbf9] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-300 hover:-translate-y-1"
                 >
-                  {headline.category || 'Special Report'}
-                </motion.span>
-              </div>
-            </motion.div>
+                  <p className="text-lg md:text-xl font-black leading-none">{stat.value}</p>
+                  <p className="text-[8px] md:text-[9px] font-mono uppercase tracking-wider mt-1 text-gray-600">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
-            <h2 className="text-4xl md:text-5xl font-black leading-none mb-4 tracking-tight decoration-red-600 decoration-4 underline-offset-4 group-hover:underline">
-              {headline.title}
-            </h2>
+          <p className="font-serif text-sm leading-relaxed text-justify text-gray-800 line-clamp-5 mb-4">
+            <span className="float-left text-4xl font-black mr-2 leading-none">{flagship.description.charAt(0)}</span>
+            {flagship.description.slice(1)}
+          </p>
 
-            {headline.stats && (
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                {headline.stats.map((stat, idx) => (
-                  <motion.div
-                    key={stat.label}
-                    variants={stampIn}
-                    custom={0.15 + idx * 0.12}
-                    className="border-2 border-black p-2 text-center bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-300 hover:-translate-y-1"
-                  >
-                    <p className="text-xl md:text-2xl font-black leading-none">{stat.value}</p>
-                    <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider mt-1 text-gray-600">{stat.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-
-            <p className="font-serif text-lg leading-relaxed mb-4 text-justify">
-              <span className="float-left text-6xl font-black mr-3 mt-1 leading-none">T</span>
-              {headline.description}
-            </p>
-            <div className="flex flex-wrap gap-2 mb-4">
-               {headline.tech.map(t => <span key={t} className="text-[10px] border border-black px-2 py-0.5 font-mono uppercase italic">{t}</span>)}
+          <div className="mt-auto">
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {flagship.tech.slice(0, 6).map(t => (
+                <span key={t} className="text-[9px] border border-black px-1.5 py-0.5 font-mono uppercase italic">{t}</span>
+              ))}
             </div>
             <button className="text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-1 group-hover:text-red-600 group-hover:border-red-600 transition-colors">
               Read Full Article <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
             </button>
-          </motion.article>
+          </div>
         </div>
+      </motion.article>
 
-        {/* === MIDDLE: SUB-STORIES (Index 1 & 2) === */}
-        <div className="lg:col-span-3 flex flex-col gap-8 border-r border-black/10 pr-0 lg:pr-8">
-          {orderedProjects.slice(1, 3).map((project, idx) => {
-            const actualIndex = idx + 1;
+      {/* ============ DESK TABS (filter) ============ */}
+      <div className="border-y-2 border-black mb-8 flex items-center gap-4 md:gap-8 overflow-x-auto whitespace-nowrap px-1" role="group" aria-label="Filter projects by desk">
+        <span className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-2 py-1 my-2 shrink-0 hidden md:inline">
+          News Desks
+        </span>
+        {DESKS.map((desk) => (
+          <button
+            key={desk}
+            onClick={() => setActiveDesk(desk)}
+            aria-pressed={activeDesk === desk}
+            className={`relative py-3 text-[11px] md:text-xs font-mono uppercase tracking-widest transition-colors ${
+              activeDesk === desk ? 'text-red-600 font-bold' : 'text-gray-600 hover:text-black'
+            }`}
+          >
+            {desk}
+            {activeDesk === desk && (
+              <motion.span
+                layoutId="desk-underline"
+                className="absolute left-0 right-0 bottom-0 h-[3px] bg-red-600"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
 
-            return (
-              <motion.article
-                layout
-                key={project.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportOnce}
-                variants={settleIn}
-                custom={0.1 + idx * 0.12}
-                whileHover={{ y: -4 }}
-                className="group border-b border-black/10 pb-6 last:border-0 cursor-pointer"
-                onClick={() => onProjectClick(project)}
-              >
-                <motion.div layoutId={`img-${project.title}`} className="border border-black mb-3 p-1 relative">
-                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
-                     <span className="bg-white text-[10px] font-bold px-2 py-1 uppercase border border-black">Read Article</span>
-                   </div>
-                   <div className="relative overflow-hidden">
-                     <img src={project.image} alt={`Screenshot of ${project.title}`} className="w-full transition-transform duration-500 aspect-square object-cover group-hover:scale-105" />
-                     <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
-                   </div>
-                </motion.div>
-                {project.category && (
-                  <span className="text-[11px] font-bold text-red-600 uppercase block mb-1">{project.category}</span>
-                )}
-                <h4 className="font-bold text-xl leading-tight mb-2">
+      {/* ============ ARTICLE GRID ============ */}
+      <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AnimatePresence mode="popLayout">
+          {articles.map((project, idx) => (
+            <motion.article
+              layout
+              key={project.title}
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1, transition: { delay: (idx % 3) * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
+              exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.2 } }}
+              onClick={() => onProjectClick(project)}
+              className="group cursor-pointer border border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-[box-shadow,transform] duration-300 flex flex-col"
+            >
+              {/* Image: grayscale print that colorizes on hover */}
+              <div className="relative border-b border-black overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={`Screenshot of ${project.title}`}
+                  className="w-full aspect-video object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gray-200/30 mix-blend-multiply pointer-events-none"></div>
+              </div>
+
+              <div className="p-4 flex flex-col flex-grow">
+                {/* Kicker row */}
+                <p className="flex justify-between items-baseline text-[10px] font-mono uppercase tracking-widest mb-2">
+                  <span className="font-bold text-red-600">{project.category}</span>
+                  <span className="text-gray-400">Page C{idx + 2}</span>
+                </p>
+
+                <h4 className="font-black text-lg leading-tight mb-2">
                   <button
                     onClick={(e) => { e.stopPropagation(); onProjectClick(project); }}
                     className="text-left group-hover:underline focus:underline decoration-red-600 decoration-2 underline-offset-2"
@@ -166,85 +206,36 @@ const ProjectSection = ({ projects, onProjectClick }) => {
                     {project.title}
                   </button>
                 </h4>
-                <p className="text-sm font-serif text-gray-700 line-clamp-3">{project.description}</p>
-                <button
-                  onClick={(e) => { e.stopPropagation(); promoteToHeadline(actualIndex); }}
-                  aria-label={`Move ${project.title} to the headline slot`}
-                  className="mt-2 text-[11px] font-mono uppercase tracking-widest text-gray-600 hover:text-red-600 focus:text-red-600 group/promote"
-                >
-                  <span className="inline-block transition-transform duration-500 group-hover/promote:-rotate-180">↺</span> Promote to headline
-                </button>
-              </motion.article>
-            );
-          })}
-        </div>
 
-        {/* === RIGHT: NEWS BRIEFS (Index 3+) === */}
-        <div className="lg:col-span-2">
-          <h5 className="font-black uppercase border-b-2 border-black mb-4 text-center bg-black text-white text-xs py-1">Code Briefs</h5>
-          <div className="flex flex-col gap-6">
-            {orderedProjects.slice(3).map((project, idx) => {
-              const actualIndex = idx + 3;
+                <p className="font-serif text-sm text-gray-700 leading-relaxed line-clamp-3 mb-4">
+                  {project.description}
+                </p>
 
-              return (
-                <motion.div
-                  layout
-                  key={project.title}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={viewportOnce}
-                  variants={settleIn}
-                  custom={Math.min(idx * 0.07, 0.35)}
-                  whileHover={{ x: 3 }}
-                  className="border-b border-dashed border-gray-400 pb-4 last:border-0 cursor-pointer group"
-                  onClick={() => onProjectClick(project)}
-                >
-                  <p className="text-[11px] font-bold text-red-600 uppercase mb-1 flex items-center justify-between gap-1">
-                    {project.category || 'Repository'}
-                    <button
-                      onClick={(e) => { e.stopPropagation(); promoteToHeadline(actualIndex); }}
-                      aria-label={`Move ${project.title} to the headline slot`}
-                      title="Promote to headline"
-                      className="opacity-40 group-hover:opacity-100 focus:opacity-100 transition-all duration-500 text-black hover:text-red-600 hover:-rotate-180"
-                    >
-                      ↺
-                    </button>
-                  </p>
-                  <div className="flex gap-3">
-                    <div className="w-14 h-14 shrink-0 border border-black p-0.5 bg-white">
-                      <img
-                        src={project.image}
-                        alt=""
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <h6 className="font-bold text-sm leading-tight mb-1">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); onProjectClick(project); }}
-                          className="text-left hover:underline focus:underline decoration-red-600 decoration-2 underline-offset-2"
-                        >
-                          {project.title}
-                        </button>
-                      </h6>
-                      <p className="text-xs font-serif italic text-gray-600 line-clamp-2">{project.description}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                {/* Footer rule: tech + read */}
+                <div className="mt-auto pt-3 border-t border-dashed border-gray-400 flex items-center justify-between gap-2">
+                  <span className="text-[9px] font-mono uppercase text-gray-500 truncate">
+                    {project.tech.slice(0, 3).join(' · ')}
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest shrink-0 group-hover:text-red-600 transition-colors">
+                    Read <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+                  </span>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
-            {/* Archive pointer */}
-            <a
-              href="https://github.com/SandeepKahawatta?tab=repositories"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[11px] font-serif italic text-gray-600 hover:text-red-600 transition-colors text-center border-t border-black pt-3"
-            >
-              — More stories in the archive, page C4 &rarr;
-            </a>
-          </div>
-        </div>
+      {/* Archive pointer */}
+      <div className="text-center mt-10 border-t border-black pt-4">
+        <a
+          href="https://github.com/SandeepKahawatta?tab=repositories"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs font-serif italic text-gray-600 hover:text-red-600 transition-colors"
+        >
+          — More stories in the archive, page C4 &rarr;
+        </a>
       </div>
     </section>
   );
