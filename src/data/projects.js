@@ -19,6 +19,11 @@ export const projects = [
     role: "Final Year Researcher",
     description: "Designed UQ-RecurrentHGAT, a novel AI architecture fusing Heterogeneous Graph Attention Networks with Multi-Agent Proximal Policy Optimization (MAPPO) for real-time adaptive signal control across entire city networks. Benchmarked against SUMO actuated baselines: 81.8% reduction in average network waiting time, 62.2% reduction in queue length, and 79.7% reduction in total weighted cost, with ~3.17 ms P50 inference latency validating edge-computing deployment.",
     tech: ["Python", "PyTorch", "PyTorch Geometric", "GNN", "MAPPO", "Flask", "Redis", "Docker", "SUMO"],
+    stats: [
+      { value: "-81.8%", label: "Waiting time" },
+      { value: "-62.2%", label: "Queue length" },
+      { value: "~3.17ms", label: "P50 inference" }
+    ],
     link: null,
     github: null,
     image: trafficResearchImage

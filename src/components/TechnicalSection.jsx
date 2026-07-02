@@ -7,14 +7,14 @@ const TechnicalSection = ({ skills }) => {
     <section id="skills" className="mb-20 border-t-8 border-black pt-4 scroll-mt-24">
 
       {/* SECTION MASTHEAD */}
-      <div className="flex flex-col md:flex-row justify-between items-end border-b-4 border-black pb-2 mb-8 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b-4 border-black pb-2 mb-8 gap-4">
         <div>
           <h5 className="font-mono text-xs uppercase tracking-widest text-gray-500 mb-1">Section B</h5>
           <h3 className="text-5xl md:text-6xl font-black font-news uppercase tracking-tighter leading-none">
             Technical<br/>Review
           </h3>
         </div>
-        <div className="text-right font-serif italic text-sm text-gray-600 max-w-md">
+        <div className="text-left md:text-right font-serif italic text-sm text-gray-600 max-w-md">
           "A deep dive into the architectural decisions, engineering principles, and core competencies driving modern software solutions."
         </div>
       </div>
