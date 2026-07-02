@@ -40,7 +40,7 @@ const Hero = ({ profile }) => {
 
         {/* Image Column */}
         <div className="relative group">
-           <div className="relative w-full aspect-[3/4] overflow-hidden border border-black contrast-125 brightness-110 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+           <div className="relative w-full aspect-[3/4] max-h-[65vh] md:max-h-none overflow-hidden border border-black contrast-125 brightness-110 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <img
                  src={profileImage}
                  alt={`Portrait of ${profile.name}`}

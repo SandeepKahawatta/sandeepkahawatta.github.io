@@ -12,20 +12,23 @@ import ContactSection from './ContactSection';
 import ProjectModal from './ProjectModal';
 import Footer from './Footer';
 import WelcomeSplash from './WelcomeSplash';
+import RecordsSection from './RecordsSection';
 import { useActiveSection } from '../hooks/useActiveSection';
+import { useTheme } from '../hooks/useTheme';
 
 const SECTION_IDS = ['editorial', 'experience', 'projects', 'classifieds', 'contact'];
 
 const NewPortfolio = ({ projects, profile, skills, education, achievements, experience }) => {
   const [selectedProject, setSelectedProject] = useState(null);
   const activeSection = useActiveSection(SECTION_IDS);
+  const [theme, toggleTheme] = useTheme();
 
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-[#fcfbf9] text-[#0d121b] font-news selection:bg-black selection:text-white">
         <WelcomeSplash />
-        <Header />
-        <Navbar activeSection={activeSection} />
+        <Header theme={theme} onToggleTheme={toggleTheme} />
+        <Navbar activeSection={activeSection} theme={theme} onToggleTheme={toggleTheme} />
 
         <main className="max-w-[1200px] mx-auto px-4 md:px-8 py-12">
           {/* Cover Story + Technical Review + Sidebar */}
@@ -43,6 +46,9 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements, expe
           <ProjectSection projects={projects} onProjectClick={setSelectedProject} />
           <ClassifiedsSection skills={skills} profile={profile} />
           <ContactSection profile={profile} />
+
+          {/* Education & recognition — mobile only (lives in the sidebar on desktop) */}
+          <RecordsSection education={education} achievements={achievements} />
 
           <ProjectModal
             project={selectedProject}

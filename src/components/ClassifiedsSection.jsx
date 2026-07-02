@@ -74,7 +74,7 @@ const ClassifiedsSection = ({ skills, profile }) => {
       </div>
 
       {/* Masonry Layout for Content */}
-      <div className="columns-1 md:columns-2 lg:columns-4 gap-6 px-2 pb-12">
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 px-2 pb-12">
 
         {/* SKILLS CATEGORIES */}
         {Object.entries(skills).map(([category, items]) => (
@@ -96,7 +96,7 @@ const ClassifiedsSection = ({ skills, profile }) => {
                     </div>
                     {/* The "Dot Leader" Effect */}
                     <div className="flex-grow border-b-2 border-dotted border-gray-300 mb-1 mx-1"></div>
-                    <span className="bg-[#fcfbf9] z-10 pl-1 text-[10px] italic text-gray-500 group-hover:bg-yellow-100">
+                    <span className="hidden sm:inline bg-[#fcfbf9] z-10 pl-1 text-[10px] italic text-gray-500 group-hover:bg-yellow-100">
                       Avail.
                     </span>
                   </li>
@@ -105,8 +105,8 @@ const ClassifiedsSection = ({ skills, profile }) => {
           </div>
         ))}
 
-        {/* THE "COUPON" (Contact Section) */}
-        <div className="break-inside-avoid mb-8 relative group">
+        {/* THE "COUPON" (Contact Section) — spans all columns on phones */}
+        <div className="break-inside-avoid mb-8 relative group [column-span:all] sm:[column-span:none]">
           <div className="border-2 border-dashed border-gray-800 p-4 bg-white relative hover:shadow-lg transition-shadow duration-300">
             {/* Scissor Icon for "Cut Here" effect */}
             <div className="absolute -top-3 -left-3 bg-[#fcfbf9] p-1 text-xl rotate-[-45deg]">✂️</div>
@@ -137,8 +137,8 @@ const ClassifiedsSection = ({ skills, profile }) => {
           </div>
         </div>
 
-        {/* EXTRA: "Horoscope" / Fun Fact to fill space */}
-        <div className="break-inside-avoid border-t border-b border-black py-4 mb-8">
+        {/* EXTRA: "Horoscope" / Fun Fact to fill space — spans all columns on phones */}
+        <div className="break-inside-avoid border-t border-b border-black py-4 mb-8 [column-span:all] sm:[column-span:none]">
             <h5 className="font-bold text-xs uppercase mb-2 flex items-center gap-2">
                 <span className="material-symbols-outlined text-base">auto_awesome</span>
                 Engineering Horoscope
