@@ -3,6 +3,17 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Apply the saved/system theme before first paint to avoid a light flash in dark mode -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('daily-dev-theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) { /* storage unavailable: default to light */ }
+    })();
+  </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sandeep Kahawaththa — Freelance Software Developer & Full-Stack Engineer | Sri Lanka</title>
@@ -125,6 +136,15 @@
       margin: 0;
     }
     .prepress a { color: #0d121b; }
+
+    /* Night Edition for the pre-press frame */
+    html.dark .prepress { background: #131313; color: #e8e6e1; }
+    html.dark .prepress-sheet { border-color: #d6d3cd; }
+    html.dark .prepress-summary { border-color: #d6d3cd; color: #a19e97; }
+    html.dark .prepress-kicker,
+    html.dark .prepress-printing,
+    html.dark .prepress-contact { color: #8b8880; }
+    html.dark .prepress a { color: #e8e6e1; }
   </style>
 </head>
 
