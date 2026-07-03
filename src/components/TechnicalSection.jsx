@@ -87,7 +87,7 @@ const TechnicalSection = ({ skills }) => {
              <img
                src={cleanCodeImage}
                alt="Illustration of clean code architecture"
-               className="w-full h-auto grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700"
+               className="w-full h-auto max-h-52 md:max-h-none object-cover grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700"
              />
              <div className="absolute bottom-0 right-0 bg-black text-white text-[10px] px-2 py-1 uppercase font-bold">
                Fig 1.2

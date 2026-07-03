@@ -156,7 +156,9 @@ const ProjectSection = ({ projects, onProjectClick }) => {
       </motion.article>
 
       {/* ============ DESK TABS (filter) ============ */}
-      <div className="border-y-2 border-black mb-10 flex items-center gap-4 md:gap-8 overflow-x-auto whitespace-nowrap px-1" role="group" aria-label="Filter projects by desk">
+      <div className="relative border-y-2 border-black mb-10">
+      <span className="nav-fade" aria-hidden="true"></span>
+      <div className="flex items-center gap-4 md:gap-8 overflow-x-auto whitespace-nowrap pl-1 pr-10 md:pr-1" role="group" aria-label="Filter projects by desk">
         <span className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-2 py-1 my-2 shrink-0 hidden md:inline">
           News Desks
         </span>
@@ -179,6 +181,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
             )}
           </button>
         ))}
+      </div>
       </div>
 
       {/* ============ ARTICLE GRID — flat editorial cards with column rules ============ */}
