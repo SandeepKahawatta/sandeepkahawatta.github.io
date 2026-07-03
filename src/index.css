@@ -134,6 +134,30 @@ html.dark body {
 .dark ::-webkit-scrollbar-thumb { background: #4a4a4c; }
 .dark ::-webkit-scrollbar-thumb:hover { background: #5c5c5e; }
 
+/* Justified newsprint hyphenates on narrow columns (kills the "rivers") */
+.text-justify {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+/* Right-edge fade on horizontally scrollable rows (mobile scroll affordance) */
+.nav-fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2.5rem;
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(to left, #fcfbf9, rgba(252, 251, 249, 0));
+}
+.dark .nav-fade {
+    background: linear-gradient(to left, #131313, rgba(19, 19, 19, 0));
+}
+@media (min-width: 768px) {
+    .nav-fade { display: none; }
+}
+
 /* Marquee Animation */
 @keyframes marquee {
     0% { transform: translateX(0); }
