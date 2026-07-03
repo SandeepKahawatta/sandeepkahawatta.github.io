@@ -74,7 +74,7 @@ const ClassifiedsSection = ({ skills, profile }) => {
       </div>
 
       {/* Masonry Layout for Content */}
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 px-2 pb-12">
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 px-2 pb-0 md:pb-12">
 
         {/* SKILLS CATEGORIES */}
         {Object.entries(skills).map(([category, items]) => (
@@ -106,7 +106,7 @@ const ClassifiedsSection = ({ skills, profile }) => {
         ))}
 
         {/* THE "COUPON" (Contact Section) — spans all columns on phones */}
-        <div className="break-inside-avoid mb-8 relative group [column-span:all] sm:[column-span:none]">
+        <div className="break-inside-avoid mb-8 mt-6 sm:mt-0 relative group [column-span:all] sm:[column-span:none]">
           <div className="border-2 border-dashed border-gray-800 p-4 bg-white relative hover:shadow-lg transition-shadow duration-300">
             {/* Scissor Icon for "Cut Here" effect */}
             <div className="absolute -top-3 -left-3 bg-[#fcfbf9] p-1 text-xl rotate-[-45deg]">✂️</div>
