@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent, slugify } from '../lib/analytics';
 
 const ProjectModal = ({ project, isOpen, onClose }) => {
   const dialogRef = useRef(null);
@@ -134,12 +135,12 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                   <div className="mt-8 flex flex-col gap-4">
                     <h4 className="font-bold uppercase tracking-widest border-b border-black text-xs">Repository Access</h4>
                     {project.github && (
-                      <a href={project.github} target="_blank" rel="noopener noreferrer" className="bg-black text-white text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent(`project-source-${slugify(project.title)}`)} className="bg-black text-white text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
                         Visit Source Code &rarr;
                       </a>
                     )}
                     {project.link && (
-                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="border-2 border-black text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
+                      <a href={project.link} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent(`project-demo-${slugify(project.title)}`)} className="border-2 border-black text-center py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
                         View Live Demo &rarr;
                       </a>
                     )}

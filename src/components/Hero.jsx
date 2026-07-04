@@ -1,4 +1,5 @@
 import profileImage from '../assets/my/profile.jpg';
+import { trackEvent } from '../lib/analytics';
 
 const Hero = ({ profile }) => {
   return (
@@ -29,7 +30,7 @@ const Hero = ({ profile }) => {
            </div>
 
            <div className="flex gap-4">
-              <a href="#contact" className="bg-black text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
+              <a href="#contact" onClick={() => trackEvent('hire-me-hero')} className="bg-black text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors">
                  Hire Me
               </a>
               <a href="#projects" className="border border-black px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-gray-100 transition-colors">

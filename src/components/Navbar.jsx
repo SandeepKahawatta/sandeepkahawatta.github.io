@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BreakingNews from './BreakingNews';
+import { trackEvent } from '../lib/analytics';
 
 const NAV_ITEMS = [
   { id: 'editorial', label: 'About' },
@@ -37,6 +38,7 @@ const Navbar = ({ activeSection, theme, onToggleTheme }) => {
           ))}
           <a
             href="#contact"
+            onClick={() => trackEvent('hire-me-nav')}
             className="bg-red-600 text-white px-4 py-1 text-xs md:text-sm hover:bg-black transition-colors"
           >
             Hire Me

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { trackEvent } from '../lib/analytics';
 
 const SERVICES = [
   "Full-stack web applications (React, Next.js, NestJS, Node.js)",
@@ -14,6 +15,7 @@ const ContactSection = ({ profile }) => {
   // No backend on GitHub Pages: compose the letter into a mailto link
   const handleSubmit = (e) => {
     e.preventDefault();
+    trackEvent('contact-letter-composed');
     const subject = encodeURIComponent(`Project inquiry from ${senderName || 'your portfolio'}`);
     const body = encodeURIComponent(`${message}\n\n— ${senderName}`);
     window.location.href = `mailto:${profile.contact.email}?subject=${subject}&body=${body}`;
@@ -52,6 +54,7 @@ const ContactSection = ({ profile }) => {
           <div className="flex flex-wrap gap-3">
             <a
               href={`mailto:${profile.contact.email}?subject=${encodeURIComponent('Project inquiry')}`}
+              onClick={() => trackEvent('contact-email')}
               className="bg-black text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-colors"
             >
               Email the Editor
@@ -60,6 +63,7 @@ const ContactSection = ({ profile }) => {
               href={profile.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent('outbound-linkedin')}
               className="border border-black px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               LinkedIn
@@ -67,6 +71,7 @@ const ContactSection = ({ profile }) => {
             <a
               href="/resume.pdf"
               download="Sandeep_Kahawaththa_CV.pdf"
+              onClick={() => trackEvent('cv-download-contact')}
               className="border border-black px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors"
             >
               Download CV

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent, slugify } from '../lib/analytics';
 
 // Print-inspired motion: pages settle into place, stamps hit paper.
 const settleIn = {
@@ -59,6 +60,7 @@ const ProjectSection = ({ projects, onProjectClick }) => {
   const remaining = filtered.length - articles.length;
 
   const selectDesk = (desk) => {
+    trackEvent(`desk-${slugify(desk)}`);
     setActiveDesk(desk);
     setVisibleCount(PAGE_SIZE); // fresh page per desk
   };
