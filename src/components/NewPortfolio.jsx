@@ -15,6 +15,7 @@ import WelcomeSplash from './WelcomeSplash';
 import RecordsSection from './RecordsSection';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { useTheme } from '../hooks/useTheme';
+import { trackEvent, slugify } from '../lib/analytics';
 
 const SECTION_IDS = ['editorial', 'experience', 'projects', 'classifieds', 'contact'];
 
@@ -22,6 +23,12 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements, expe
   const [selectedProject, setSelectedProject] = useState(null);
   const activeSection = useActiveSection(SECTION_IDS);
   const [theme, toggleTheme] = useTheme();
+
+  // Central open handler so every card click reports which project drew attention
+  const openProject = (project) => {
+    trackEvent(`project-open-${slugify(project.title)}`);
+    setSelectedProject(project);
+  };
 
   return (
     <MotionConfig reducedMotion="user">
@@ -43,7 +50,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements, expe
           </section>
 
           <ExperienceSection experience={experience} />
-          <ProjectSection projects={projects} onProjectClick={setSelectedProject} />
+          <ProjectSection projects={projects} onProjectClick={openProject} />
           <ClassifiedsSection skills={skills} profile={profile} />
           <ContactSection profile={profile} />
 

@@ -1,4 +1,5 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
 
 const Footer = ({ profile }) => {
   const year = new Date().getFullYear();
@@ -70,7 +71,7 @@ const Footer = ({ profile }) => {
              <div className="border border-gray-700 p-4 text-center bg-[#222]">
                 <p className="font-news font-bold text-xl mb-2 text-white">Print Edition</p>
                 <p className="font-serif text-xs text-gray-400 mb-4 italic">Take a copy of the full record with you.</p>
-                <a href="/resume.pdf" download="Sandeep_Kahawaththa_CV.pdf" className="block w-full bg-white text-black text-[11px] font-bold uppercase tracking-widest py-2 hover:bg-gray-200 transition-colors">
+                <a href="/resume.pdf" download="Sandeep_Kahawaththa_CV.pdf" onClick={() => trackEvent('cv-download-footer')} className="block w-full bg-white text-black text-[11px] font-bold uppercase tracking-widest py-2 hover:bg-gray-200 transition-colors">
                   Download CV
                 </a>
              </div>

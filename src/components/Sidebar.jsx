@@ -1,5 +1,6 @@
 import { Github, Linkedin } from 'lucide-react';
 import { EducationList, AchievementsList } from './RecordsSection';
+import { trackEvent } from '../lib/analytics';
 
 const Sidebar = ({ education, achievements, profile }) => {
   return (
@@ -19,19 +20,19 @@ const Sidebar = ({ education, achievements, profile }) => {
         <p className="text-[10px] font-mono uppercase tracking-widest mb-4 text-gray-400">Help Wanted</p>
         <h5 className="text-xl font-bold leading-tight mb-2 font-serif">EXPERT ENGINEER FOR HIRE</h5>
         <p className="text-xs italic text-gray-400 mb-4">Proven track record. Will travel (remotely).</p>
-        <a href="/resume.pdf" download="Sandeep_Kahawaththa_CV.pdf" className="inline-block border border-white px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full">
+        <a href="/resume.pdf" download="Sandeep_Kahawaththa_CV.pdf" onClick={() => trackEvent('cv-download-sidebar')} className="inline-block border border-white px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full">
           Download Portfolio CV
         </a>
       </div>
 
       {/* Links */}
       <div className="order-3 lg:order-none grid grid-cols-2 gap-4">
-        <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer" className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
+        <a href={profile.contact.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('outbound-linkedin')} className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
           <div className="mb-1 flex justify-center group-hover:scale-110 transition-transform"><Linkedin size={20} /></div>
           <div className="text-[10px] font-bold uppercase tracking-widest">LinkedIn Registry</div>
           <div className="text-[10px] font-serif italic">Connect Professionally</div>
         </a>
-        <a href={profile.contact.github} target="_blank" rel="noopener noreferrer" className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
+        <a href={profile.contact.github} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('outbound-github')} className="border border-black p-2 text-center hover:bg-black hover:text-white transition-colors group">
           <div className="mb-1 flex justify-center group-hover:scale-110 transition-transform"><Github size={20} /></div>
           <div className="text-[10px] font-bold uppercase tracking-widest">Github Repository</div>
           <div className="text-[10px] font-serif italic">Inspect The Source</div>
