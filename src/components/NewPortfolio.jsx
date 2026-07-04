@@ -13,6 +13,7 @@ import ProjectModal from './ProjectModal';
 import Footer from './Footer';
 import WelcomeSplash from './WelcomeSplash';
 import RecordsSection from './RecordsSection';
+import MobileActionBar from './MobileActionBar';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { useTheme } from '../hooks/useTheme';
 
@@ -58,6 +59,7 @@ const NewPortfolio = ({ projects, profile, skills, education, achievements, expe
         </main>
 
         <Footer profile={profile} />
+        <MobileActionBar />
       </div>
     </MotionConfig>
   );
